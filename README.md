@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/Python-numpy%20%7C%20scikit--learn-0b1220?style=flat-square&logo=python&logoColor=22D3EE)](analysis)
 
 **Soham Kavathekar** · MS Chemical & Biomolecular Engineering, University of Pennsylvania
-[stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-72a22b246)
+[stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-cheme)
 
 </div>
 
