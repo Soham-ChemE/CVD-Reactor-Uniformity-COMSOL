@@ -17,7 +17,7 @@ Lighthouse (desktop preset): performance 98, accessibility 94, best practices 10
 
 | Theme | Console errors | Failed requests | Images loaded | Transfer (bytes) | Body scenes captured |
 |---|---|---|---|---|---|
-| dark | 0 | 0 | 0/0 | 775,273 | reactor, profiles |
-| light | 0 | 0 | 0/0 | 790,425 | reactor, profiles |
+| dark | 0 | 0 | 0/0 | 796,496 | reactor, profiles |
+| light | 0 | 0 | 0/0 | 790,256 | reactor, profiles |
 
 Files: `light/` and `dark/` hold `<page>-hero.png`, `<page>-scene1-*.png`, `<page>-scene2-*.png` and `<page>-mobile-375-hero.png`; `lighthouse.report.html` and `.json` are the Lighthouse run; `qa.json` is the machine-readable summary.
