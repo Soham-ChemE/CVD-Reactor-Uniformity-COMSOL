@@ -1,14 +1,25 @@
 /* Shared page runtime: theme, Lenis + GSAP ScrollTrigger sync, pinned-hero master timeline, count-ups, reveals, sticky steps.
    Classic script. Expects gsap, ScrollTrigger and Lenis to be loaded before it (pinned CDN builds in index.html). */
 (function(){
-  const root=document.documentElement, reduced=matchMedia('(prefers-reduced-motion:reduce)').matches, phone=matchMedia('(max-width:640px)').matches;
+  const root=document.documentElement, phone=matchMedia('(max-width:640px)').matches;
+  // Adaptive quality: a software WebGL renderer (SwiftShader, llvmpipe, the Microsoft basic renderer) cannot animate a full-screen
+  // scene at interactive rates, so the page serves its reduced path (hero at the final keyframe, static fallbacks for the body
+  // scenes). QA tooling sets window.__forceGL to screenshot the live scenes under software GL regardless.
+  let softGL=false; try{const c=document.createElement('canvas'),gl=c.getContext('webgl2')||c.getContext('webgl'); if(gl){const ext=gl.getExtension('WEBGL_debug_renderer_info'),r=ext?String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)):''; softGL=/swiftshader|llvmpipe|softpipe|software|microsoft basic render/i.test(r); const lose=gl.getExtension('WEBGL_lose_context'); if(lose) lose.loseContext();}}catch(e){}
+  if(window.__forceGL) softGL=false;
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches||softGL;
   const saved=(()=>{try{return localStorage.getItem('theme')}catch(e){return null}})(); if(saved) root.setAttribute('data-theme',saved);
   const isDark=()=>root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
   function applyFigs(){const t=isDark()?'dark':'light';document.querySelectorAll('img[data-fig]').forEach(i=>{const ext=i.dataset.ext?'.'+i.dataset.ext.replace(/^\./,''):'.svg';i.src=(i.dataset.dir||'assets/')+i.dataset.fig+'_'+t+ext});document.dispatchEvent(new CustomEvent('themechange',{detail:{dark:isDark()}}))}
   const btn=document.getElementById('themeBtn'); if(btn) btn.addEventListener('click',()=>{const n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}applyFigs()});
   matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyFigs); applyFigs();
 
-  const S=window.SITE={reduced, phone, isDark, hero:{t:0, fade:1, glow:0}, frame:[], ready:false};
+  // static path: reduced motion or a software renderer shows the body scenes' PNG fallbacks; a software renderer also shows the
+  // hero's static image and the page never loads three.js (index.html imports the scene modules only when SITE.softGL is false)
+  const staticFigs=()=>{const t=isDark()?'dark':'light';document.querySelectorAll('.viz img.fallback[data-viz-fig]').forEach(i=>{i.src=(i.dataset.dir||'assets/')+i.dataset.vizFig+'_'+t+'.png'})};
+  if(reduced){root.classList.add('viz-static');staticFigs();document.addEventListener('themechange',staticFigs)}
+  if(softGL){document.querySelectorAll('.hero, .sticky-fig, .w3d').forEach(h=>{h.classList.add('no-webgl');const fb=h.querySelector('.fallback');if(fb&&fb.dataset.src)fb.src=fb.dataset.src})}
+  const S=window.SITE={reduced, softGL, phone, isDark, hero:{t:0, fade:1, glow:0}, frame:[], ready:false};
   S.onFrame=cb=>S.frame.push(cb);
   const hasGSAP=typeof gsap!=='undefined'&&typeof ScrollTrigger!=='undefined';
   if(hasGSAP){gsap.registerPlugin(ScrollTrigger)}

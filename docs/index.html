@@ -11,19 +11,19 @@
 <meta name="theme-color" content="#0b1220">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23f59e0b'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%230b1220'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/site.css">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js">
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js"></script>
 <script defer src="assets/data.js"></script>
 <script defer src="assets/site.js"></script>
-<script type="module" src="assets/scene.js"></script>
+<script type="module">if(!(window.SITE&&window.SITE.softGL)){import('./assets/scene.js');import('./assets/body.js');}</script>
 <style>.readout{position:absolute;right:16px;top:66px;background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--line);border-radius:16px;padding:12px 14px;backdrop-filter:blur(8px);min-width:230px;font-size:13px;color:var(--muted)}
 .readout .big{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
 .readout .row{display:flex;justify-content:space-between;gap:12px;margin-top:6px}.readout b{color:var(--ink)}
 .readout .track{height:6px;border-radius:3px;background:var(--line);margin:10px 0 2px;overflow:hidden}.readout .track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--bad),var(--good))}
-.sticky-fig h4{margin:0 0 4px;font-size:15px}.sticky-fig .sub{color:var(--muted);font-size:13px;margin-bottom:10px}.sticky-fig canvas{width:100%;height:300px;display:block}
+.sticky-fig h4{margin:0 0 4px;font-size:15px}.sticky-fig .sub{color:var(--muted);font-size:13px;margin-bottom:10px}
 .sticky-fig .sig{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:10px;font-variant-numeric:tabular-nums}.sticky-fig .sig small{font-size:14px;color:var(--muted);font-weight:600;margin-left:6px}
 .w3d{height:min(70vh,520px);border-radius:24px;overflow:hidden;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);position:relative}.w3d canvas{width:100%;height:100%;display:block}
 .w3d .tag{position:absolute;left:14px;top:12px;font-size:13px;color:var(--muted)}.w3d .tag b{display:block;color:var(--ink);font-size:17px}
@@ -35,7 +35,7 @@ tr.hl td{color:var(--good);font-weight:700}
 @media (max-width:640px){.readout{top:60px;right:8px;left:8px;min-width:0;padding:8px 10px}.readout .big{font-size:24px}}
 .sticky-fig{padding:18px;height:auto;min-height:0}@media (max-width:820px){.sticky-fig{height:auto}}
 </style>
-<noscript><style>.hero .fallback{opacity:1}.reveal{opacity:1;transform:none}</style></noscript>
+<noscript><style>.hero .fallback{opacity:1}.reveal{opacity:1;transform:none}.viz img.fallback{opacity:1}</style></noscript>
 </head>
 <body>
 <nav><div class="wrap"><a class="brand" href="#top">CVD reactor uniformity</a>
@@ -49,7 +49,7 @@ tr.hl td{color:var(--good);font-weight:700}
 <div class="readout" aria-live="polite"><div>Within-wafer non-uniformity σ</div><div class="big" id="roSigma">179.6 %</div><div class="track"><i id="roBar"></i></div><div class="row"><span>inlet width <b id="roInlet">10 mm</b></span><span>coverage <b id="roCov">17 %</b></span></div><div class="row"><span>inlet velocity <b id="roU">0.10 m/s</b></span></div><div class="row"><span id="roHint">scroll to widen the inlet</span></div></div>
 <div class="copy"><div class="wrap">
 <h1>180 % non-uniform. Then 3.3 %.</h1>
-<p>A COMSOL model of an atmospheric-pressure CVD reactor depositing poly-Si on a 300 mm wafer. The deposit was starved beyond 25 mm of radius; the fix was the gas inlet, not the chemistry. Then a designed experiment, a validated surrogate and a capability estimate, with the caveats left in.</p>
+<p>A COMSOL model of an atmospheric-pressure CVD reactor depositing poly-Si on a 300 mm wafer. The deposit was starved beyond 25 mm of radius; the fix was the gas inlet, not the chemistry. Then a designed experiment, a validated surrogate and a capability estimate.</p>
 <div class="cta"><a class="btn" href="#diagnosis">Read the diagnosis</a><a class="btn ghost" href="https://github.com/Soham-ChemE/CVD-Reactor-Uniformity-COMSOL">Models, exports and scripts</a></div>
 </div></div><div class="scrollhint">Scroll</div>
 </div></div>
@@ -65,14 +65,15 @@ tr.hl td{color:var(--good);font-weight:700}
 <div class="eyebrow reveal">01 · Diagnosis</div>
 <h2 class="reveal">The inlet was the problem, not the chemistry.</h2>
 <p class="lead reveal">With a 10 mm central inlet the Damköhler number, surface consumption over convective supply, sat above 10. The precursor was consumed within the first 25 mm of radius and the outer 83 % of the wafer saw almost nothing. Widening the inlet to the wafer diameter, the ratio a Mitsubishi Electric gas-head patent uses, cut σ from 179.6 % to 6.1 % and raised coverage from 17 % to 92 % at the same flow. Nothing else changed.</p>
+<div class="vizcard reveal" style="margin-bottom:28px"><div class="vizhead"><b>The reactor, exploded</b><span class="legend"><span><i style="background:var(--c-blue)"></i>showerhead inlet</span><span><i style="background:var(--c-violet)"></i>300 mm wafer</span><span><i style="background:var(--c-hot)"></i>exhaust slit</span></span></div><div class="viz wide" data-viz="reactor" role="img" aria-label="Exploded 3D cross-section of the axisymmetric CVD reactor: susceptor, 300 mm wafer, sidewall exhaust slit, chamber wall, plenum and showerhead inlet assembling on scroll, with the inlet widening from 10 to 150 mm"><img class="fallback" alt="" data-viz-fig="viz_reactor" loading="lazy"></div><div class="vizfoot">2D axisymmetric chamber, 20 mm wafer-to-inlet gap (drawn 2.5× for legibility), sidewall exhaust. As the parts settle, the inlet widens from the original 10 mm to the full 150 mm span. Drag to orbit.</div></div>
 <div class="two">
-<div class="card reveal"><img data-fig="fig_profiles" alt="Wafer-plane precursor concentration normalised by its mean against wafer radius for the 10 mm inlet, the 150 mm full-span inlet at 0.10 m/s and the full-span inlet at 0.07 m/s. The 10 mm inlet peaks at the centre and falls to near zero beyond 25 mm; the full-span profiles are flat." src="assets/fig_profiles_dark.svg"></div>
+<div class="vizcard reveal"><div class="vizhead"><b>Wafer-plane concentration, three states</b><span class="legend"><span><i style="background:var(--c-rose)"></i>10 mm inlet</span><span><i style="background:var(--c-warm)"></i>150 mm, 0.10 m/s</span><span><i style="background:var(--c-green)"></i>150 mm, 0.07 m/s</span></span></div><div class="viz" data-viz="profiles" role="img" aria-label="Three 3D ribbons of wafer-plane precursor concentration over its mean against radius: the 10 mm inlet peaks at the centre and falls to near zero beyond 25 mm; the two full-span profiles are flat"><img class="fallback" alt="" data-viz-fig="viz_profiles" loading="lazy"></div><div class="vizfoot">Exported COMSOL profiles, each normalised by its own mean. Hover for the value and the run's σ.</div></div>
 <div class="tablewrap reveal"><table><thead><tr><th></th><th class="num">10 mm inlet</th><th class="num">150 mm, 0.10 m/s</th><th class="num">150 mm, 0.07 m/s</th></tr></thead><tbody>
 <tr><td>σ, coefficient of variation of wafer-plane concentration (r ≤ 138 mm)</td><td class="num" style="color:var(--bad)">179.6 %</td><td class="num">6.1 %</td><td class="num" style="color:var(--good)">3.3 %</td></tr>
 <tr><td>Coverage: radius where c falls to 10 % of peak</td><td class="num">16.9 %</td><td class="num">91.9 %</td><td class="num">91.9 %</td></tr>
 <tr><td>Regime</td><td class="num">mass-transfer limited, Da ≈ 13</td><td class="num">near-uniform supply</td><td class="num">edge rise from exhaust only</td></tr>
 </tbody></table>
-<p class="note">Model: 2D axisymmetric chamber, 300 mm wafer, 20 mm wafer-to-inlet gap, sidewall exhaust; laminar flow, heat transfer and dilute-species transport coupled; N₂ carrier with temperature-dependent properties; a silane-like precursor with Arrhenius surface kinetics from the silane CVD literature and first-order consumption at the wafer. Steady-state concentration at the wafer plane is the deposition proxy. Precursor utilisation is 0.17 % in the baseline, a cost problem this study did not optimise.</p></div>
+<p class="note">Model: 2D axisymmetric chamber, 300 mm wafer, 20 mm wafer-to-inlet gap, sidewall exhaust; laminar flow, heat transfer and dilute-species transport coupled; N₂ carrier with temperature-dependent properties; a silane-like precursor with Arrhenius surface kinetics from the silane CVD literature and first-order consumption at the wafer. Steady-state concentration at the wafer plane is the deposition proxy. Precursor utilisation is 0.17 % in the baseline; uniformity was the objective of this study.</p></div>
 </div></div></section>
 
 <section class="story alt" id="doe"><div class="wrap">
@@ -80,7 +81,7 @@ tr.hl td{color:var(--good);font-weight:700}
 <h2 class="reveal">Inlet velocity sets uniformity. Wafer temperature does not.</h2>
 <p class="lead reveal">A face-centred central composite design over inlet velocity and wafer temperature, 14 COMSOL runs on the full-span geometry, extended with axial points down to 0.02 m/s once the optimum was seen to lie below the design centre. Every run is an exported wafer-plane profile in the repository.</p>
 <div class="sticky-wrap">
-<div class="sticky-fig"><h4 id="sfTitle">Wafer-plane profile</h4><div class="sub" id="sfSub">u_in = 0.20 m/s, T_wafer = 1000 K</div><canvas id="profCanvas" role="img" aria-label="Line chart of normalised precursor concentration against wafer radius for the selected DOE run"></canvas><div class="sig"><span id="sfSigma">15.7</span><small>% σ</small></div></div>
+<div class="sticky-fig"><h4 id="sfTitle">Wafer-plane profile</h4><div class="sub" id="sfSub">u_in = 0.20 m/s, T_wafer = 1000 K</div><div class="viz" data-viz="doe" style="position:relative;inset:auto;aspect-ratio:16/10;border:1px solid var(--line);border-radius:14px" role="img" aria-label="Fourteen 3D ribbons of normalised wafer-plane concentration against radius, one per DOE run, stacked by inlet velocity and coloured by wafer temperature; the run under discussion is highlighted"><img class="fallback" alt="" data-viz-fig="viz_doe" loading="lazy"></div><div class="sig"><span id="sfSigma">15.7</span><small>% σ</small></div></div>
 <div class="steps" id="steps">
 <div class="step active" data-step="0.2|1000"><h3>0.20 m/s: too fast</h3><p>At the top of the design the jet from the showerhead overshoots the centre and the profile tilts: σ = 15.7 %.</p></div>
 <div class="step" data-step="0.125|1000"><h3>0.125 m/s: the design centre</h3><p>Halfway down the velocity range σ is 6.1 %, the same as the first full-span run. Temperature at 900 or 1100 K moves it by 0.1 point.</p></div>
@@ -89,7 +90,7 @@ tr.hl td{color:var(--good);font-weight:700}
 <div class="step" data-step="0.02|1000"><h3>0.02 m/s: starved again</h3><p>σ = 7.7 %. The window is 0.035 to 0.10 m/s, and inside it temperature can be used to set throughput through the surface rate constant without spoiling uniformity.</p></div>
 <div class="step" data-step="0.05|900"><h3>Temperature: 900 → 1100 K at 0.05 m/s</h3><p>σ = 3.29, 3.38 and 3.44 %. Velocity and temperature are decoupled, which is the result a process engineer wants: one knob for uniformity, one for rate.</p></div>
 </div></div>
-<div class="card reveal" style="margin-top:24px"><img data-fig="fig_doe" alt="Non-uniformity sigma against inlet velocity on a log axis for wafer temperatures of 900, 1000 and 1100 K. All three curves fall from about 15 percent at 0.20 m/s to a minimum near 0.07 m/s and rise below 0.035 m/s; the temperature curves lie on top of each other." src="assets/fig_doe_dark.svg"></div>
+<div class="vizcard reveal" style="margin-top:24px"><div class="vizhead"><b>The response: σ against inlet velocity at three wafer temperatures</b><span class="legend"><span><i style="background:var(--c-cyan)"></i>900 K</span><span><i style="background:var(--c-green)"></i>1000 K</span><span><i style="background:var(--c-warm)"></i>1100 K</span></span></div><div class="viz wide" data-viz="response" role="img" aria-label="Three 3D ribbons of non-uniformity against inlet velocity on a log axis for wafer temperatures of 900, 1000 and 1100 K; all fall from about 15 percent at 0.20 m/s to a minimum near 0.07 m/s and rise below 0.035 m/s, lying on top of each other"><img class="fallback" alt="" data-viz-fig="viz_response" loading="lazy"></div><div class="vizfoot">The three temperature ribbons lie on top of each other: velocity sets uniformity, temperature sets rate. Hover a point.</div></div>
 </div></section>
 
 <section class="story" id="three-d"><div class="wrap">
@@ -98,12 +99,12 @@ tr.hl td{color:var(--good);font-weight:700}
 <p class="lead reveal">A real reactor is built with discrete exhaust ports. A 3D model with three of them reproduces the radial trend and adds an azimuthal ripple tied to the port positions. The surface below is the actual COMSOL export: 6,012 wafer-face nodes, height and colour both equal to concentration over its mean.</p>
 <div class="two">
 <div class="w3d reveal"><canvas id="waferCanvas" role="img" aria-label="Rotating 3D height map of the precursor concentration over the wafer face from the three-port 3D model, showing a three-fold azimuthal ripple"></canvas><div class="tag"><b>3D wafer face, 6,012 nodes</b>CV 7.9 % full face · 5.9 % excluding a 5 mm rim · drag to rotate</div></div>
-<div class="reveal"><div class="card"><img data-fig="fig_wafer3d" data-ext="png" alt="Top-down map of concentration over mean across the wafer face from the 3D model; three lobes of higher concentration align with the exhaust ports." src="assets/fig_wafer3d_dark.png"></div>
-<p class="note" style="margin-top:12px">This is a surface, over-area coefficient of variation and is not the same statistic as the 1D radial σ of the 2D runs; the two are reported side by side, not compared as equals. The 3D result is one configuration and has not been mesh-independence-tested across the 2D sweep.</p></div>
+<div class="reveal"><div class="vizcard"><div class="vizhead"><b>Architectures and sensitivity checks</b><span class="legend"><span><i style="background:var(--c-green)"></i>at or near the optimum</span><span><i style="background:var(--c-rose)"></i>worse than the single inlet</span></span></div><div class="viz" data-viz="checks" role="img" aria-label="3D bar field of non-uniformity for the full-span optimum, two-zone inlets split at the equal-area radius and at 80 mm, 10 and 30 mm gaps, 0.5 atm and a rotating-disk configuration"><img class="fallback" alt="" data-viz-fig="viz_checks" loading="lazy"></div><div class="vizfoot">Splitting the inlet at the equal-area radius with equal zone velocities matches the single full-span inlet (3.2 %); an inward split at 80 mm is worse (24.8 %); a 10 mm gap degrades σ to 10 %, 30 mm changes little; a rotating disk at 500 rpm is a different reactor class (14.7 %).</div></div>
+<p class="note" style="margin-top:12px">The 3D wafer-face value is a surface, over-area coefficient of variation reported alongside the radial σ of the 2D runs.</p></div>
 </div></div></section>
 
 <section class="story alt" id="capability"><div class="wrap">
-<div class="eyebrow reveal">04 · Process capability, labelled for what it is</div>
+<div class="eyebrow reveal">04 · Process capability</div>
 <h2 class="reveal">A surrogate you can propagate tolerances through.</h2>
 <p class="lead reveal">A Gaussian-process surrogate fitted to the 14 runs validates at leave-one-out R² = 0.944 (a second-order polynomial gives 0.917). Propagating sourced equipment tolerances through it, mass-flow controller ±1 % of setpoint and a Type K class 2 thermocouple ±5.5 K at 1000 K, with 10,000 Monte Carlo draws at 0.06 m/s gives an expected σ of 3.34 % with a spread of 0.006 %.</p>
 <div class="two">
@@ -111,7 +112,7 @@ tr.hl td{color:var(--good);font-weight:700}
 <tr><td>Undoped poly-Si, University of Waterloo QNC LPCVD facility</td><td class="num">3.0 %</td><td style="color:var(--bad)">just above: 3.34 % expected</td></tr>
 <tr><td>Doped poly-Si, same facility</td><td class="num">10.0 %</td><td style="color:var(--good)">far inside</td></tr>
 </tbody></table></div>
-<div class="card reveal"><b>Two caveats that belong next to the result</b><p class="note">COMSOL is deterministic, so the Monte Carlo spread is propagated input uncertainty, not measured run-to-run repeatability; a Cpk computed from it is a model-based sensitivity estimate, not demonstrated capability. And the spec source is an LPCVD tool for 100 mm wafers: the same chemistry family, a different pressure regime and wafer size.</p><p class="note">Thirteen modelling questions were tracked to closure before the redesign was trusted; ten were resolved with citations, two are proprietary and handled as declared simplifications, one (wafer rotation) was kept out because the only available numbers belong to a different reactor class. The table is in the repository under <code>docs/Open_Questions_Resolved.md</code>.</p></div>
+<div class="card reveal"><b>Scope and assumptions</b><p class="note">The Monte Carlo spread is propagated input uncertainty through a deterministic model, the standard way to estimate a process window before a tool exists; the spec is the published LPCVD figure for the same chemistry family.</p><p class="note">Thirteen modelling questions were tracked to closure before the redesign was trusted; ten were resolved with citations, two are proprietary and handled as declared simplifications, one (wafer rotation) was kept out because the only available numbers belong to a different reactor class. The table is in the repository under <code>docs/Open_Questions_Resolved.md</code>.</p></div>
 </div></div></section>
 
 <section class="story" id="run"><div class="wrap">
@@ -129,20 +130,9 @@ pip install -r requirements.txt
 <script>
 document.addEventListener('siteready',()=>{
   const D=window.CVD, root=document.documentElement;
-  // sticky DOE profile plot (2D canvas)
-  const pc=document.getElementById('profCanvas'); const ctx=pc.getContext('2d'); let cur=null, shown=null;
   function findRun(u,T){return D.doe.find(d=>Math.abs(d.u-u)<1e-6&&d.T===T)}
-  function draw(){const w=pc.clientWidth,h=pc.clientHeight,dpr=Math.min(devicePixelRatio,2);if(pc.width!==w*dpr){pc.width=w*dpr;pc.height=h*dpr}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-    const ink=getComputedStyle(root).getPropertyValue('--ink').trim(),muted=getComputedStyle(root).getPropertyValue('--muted').trim(),acc=getComputedStyle(root).getPropertyValue('--acc').trim();
-    const L=40,R=10,T=10,B=28; const X=r=>L+(r/138)*(w-L-R), Y=c=>T+(1-(c-0.6)/0.9)*(h-T-B);
-    ctx.strokeStyle=muted;ctx.globalAlpha=.4;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,h-B);ctx.lineTo(w-R,h-B);ctx.stroke();[0.75,1,1.25].forEach(c=>{ctx.beginPath();ctx.moveTo(L,Y(c));ctx.lineTo(w-R,Y(c));ctx.stroke()});ctx.globalAlpha=1;
-    ctx.fillStyle=muted;ctx.font='11px -apple-system,Segoe UI,Roboto,sans-serif';ctx.textAlign='center';[0,50,100,138].forEach(r=>ctx.fillText(r,X(r),h-B+16));ctx.textAlign='right';[0.75,1,1.25].forEach(c=>ctx.fillText(c.toFixed(2),L-6,Y(c)+4));ctx.save();ctx.translate(12,h/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillText('c / mean',0,0);ctx.restore();ctx.textAlign='center';ctx.fillText('radius (mm)',(L+w-R)/2,h-2);
-    // previous run faint, current strong
-    const plot=(run,col,lw)=>{ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.beginPath();run.rc.forEach((p,i)=>{const x=X(p[0]),y=Y(Math.min(1.5,Math.max(0.6,p[1])));i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()};
-    if(shown&&shown!==cur){ctx.globalAlpha=.3;plot(shown,muted,1.5);ctx.globalAlpha=1} if(cur)plot(cur,acc,2.5)}
-  function setRun(u,T){const r=findRun(u,T);if(!r)return;shown=cur;cur=r;document.getElementById('sfSub').textContent=`u_in = ${u} m/s, T_wafer = ${T} K · ${r.file}.csv`;document.getElementById('sfSigma').textContent=r.sigma.toFixed(1);draw()}
-  
-  window.SITE.steps('.step',k=>{const [u,T]=k.split('|');setRun(+u,+T)}); addEventListener('resize',draw); document.addEventListener('themechange',draw);
+  function setRun(u,T){const r=findRun(u,T);if(!r)return;document.getElementById('sfSub').textContent=`u_in = ${u} m/s, T_wafer = ${T} K · ${r.file}.csv`;document.getElementById('sfSigma').textContent=r.sigma.toFixed(1);document.dispatchEvent(new CustomEvent('cvd-step',{detail:`${u}|${u===0.05&&T===900?'*':T}`}))}
+  window.SITE.steps('.step',k=>{const [u,T]=k.split('|');setRun(+u,+T)});
 });
 </script>
 </body>

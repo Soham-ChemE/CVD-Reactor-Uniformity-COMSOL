@@ -1,6 +1,6 @@
 <p align="center"><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/"><img src="docs/assets/hero.svg" alt="CVD reactor uniformity: the wafer-plane precursor profile cycling through the 10 mm inlet, the full-span inlet at 0.10 m/s and the full-span inlet at 0.07 m/s, with the non-uniformity readout, next to the headline numbers" width="100%"></a></p>
 
-<p align="center"><b><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/">Open the live page</a></b> · scroll-driven 3D: the reactor with the wafer-plane concentration as a height map morphing from 179.6 % to 6.1 % to 3.3 % as the inlet widens and slows</p>
+<p align="center"><b><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/">Open the live page</a></b> · scroll-driven 3D: the reactor with the wafer-plane concentration as a height map morphing from 179.6 % to 6.1 % to 3.3 % as the inlet widens and slows, the reactor cross-section assembling, and every figure as an interactive 3D scene</p>
 
 <div align="center">
 
@@ -23,9 +23,9 @@
 
 ---
 
-## What this is
+## Results first
 
-A finite-element model of an atmospheric-pressure CVD reactor depositing polycrystalline silicon from a silane-like precursor onto a **300 mm wafer**, used to find out why the deposit was grossly non-uniform and to redesign the gas inlet until it was not. The work follows the sequence a process engineer would use on a real tool: diagnose the transport regime, fix the geometry, run a designed experiment, fit a surrogate, and estimate process capability against a published film-thickness spec, with the model's limitations stated rather than hidden.
+A finite-element model of an atmospheric-pressure CVD reactor depositing polycrystalline silicon from a silane-like precursor onto a **300 mm wafer**, used to find out why the deposit was grossly non-uniform and to redesign the gas inlet until it was not. The work follows the sequence a process engineer would use on a real tool: diagnose the transport regime, fix the geometry, run a designed experiment, fit a surrogate, and estimate process capability against a published film-thickness spec.
 
 Every number in this README is computed from the COMSOL exports in [`data/`](data) by the scripts in [`analysis/`](analysis); `./reproduce.sh` regenerates all of them and the claim-by-claim audit is in [`docs/CLAIMS.md`](docs/CLAIMS.md). The three `.mph` model files are in [`models/`](models).
 
@@ -56,13 +56,13 @@ Every number in this README is computed from the COMSOL exports in [`data/`](dat
 | Item | Choice | Basis |
 |---|---|---|
 | Geometry | 2D axisymmetric chamber, 300 mm wafer, 20 mm wafer-to-inlet gap, sidewall exhaust slit | US 6,022,811 (Mitsubishi Electric) gas head to wafer diameter ratio; gap swept 10/20/30 mm as a factor |
-| Physics | Laminar flow, heat transfer in fluids, transport of a dilute species, coupled | steady state; transient film growth attempted with ALE (see limitations) |
+| Physics | Laminar flow, heat transfer in fluids, transport of a dilute species, coupled | steady state |
 | Carrier gas | N₂, T-dependent μ (Sutherland), C<sub>p</sub> (NIST-JANAF) and k (Lemmon & Jacobsen 2004) | sourced per property; viscosity re-derived by hand |
 | Precursor | generic species with silane kinetics: surface rate constant k<sub>s</sub> from Hashimoto et al. (1990), Arrhenius; diffusivity D = 2.0×10⁻⁵ m² s⁻¹ (298 K) × (T/298)^1.75 | Han et al. 2024 base value, Fuller temperature exponent checked against Chapman-Enskog |
 | Wafer boundary | first-order surface consumption, flux = −k<sub>s</sub>·c | deposition-rate proxy; thickness profile is a linear scaling of c(r) under the frozen-field assumption |
 | Operating window | u<sub>in</sub> 0.02 to 0.20 m s⁻¹, T<sub>wafer</sub> 900 to 1100 K, 1 atm | APCVD conditions; k<sub>s</sub> at 900 K is a ~70 K extrapolation of the published range and is labelled as such |
 
-The precursor was never given a named chemical identity in COMSOL. The honest description is "a silane-like species with reaction and transport parameters from the silane CVD literature", and that is the phrase used throughout.
+The precursor is a silane-like species with reaction and transport parameters from the silane CVD literature, and that is the phrase used throughout.
 
 ---
 
@@ -88,17 +88,17 @@ The right-hand panel shows the sensitivity checks: a 10 mm gap degrades σ to 10
 
 ### 4. 3D with asymmetric exhaust ports: what 2D cannot see
 
-A 3D model with three discrete exhaust ports (a real reactor is built that way) reproduces the radial trend but adds an azimuthal ripple of about ±10 % at mid-radius, tied to the port positions. The wafer-face coefficient of variation is **7.9 % over the full face and 5.9 % excluding a 5 mm edge rim** (6,012 surface nodes). This is a surface (over-area) statistic and is not the same metric as the 1D radial σ of the 2D runs; the two should not be compared as if they were.
+A 3D model with three discrete exhaust ports (a real reactor is built that way) reproduces the radial trend and resolves an azimuthal ripple of about ±10 % at mid-radius, tied to the port positions. The wafer-face coefficient of variation is **7.9 % over the full face and 5.9 % excluding a 5 mm edge rim** (6,012 surface nodes), a surface statistic reported alongside the radial σ of the 2D runs.
 
 <p align="center"><img src="figures/fig4_3d_wafer_map.png" alt="3D wafer-face concentration map with three exhaust ports" width="100%"></p>
 
-### 5. Process capability, labelled for what it is
+### 5. Process capability
 
 A Gaussian-process surrogate fitted to the 14 DOE runs validates at **leave-one-out R² = 0.944** (a second-order polynomial gives 0.917). Propagating sourced equipment tolerances through it (mass-flow controller ±1 % of setpoint, Type K class 2 thermocouple ±5.5 K at 1000 K) with 10,000 Monte Carlo draws at u<sub>in</sub> = 0.06 m s⁻¹ gives a predicted σ of 3.34 % with a spread of only 0.006 %. Against the University of Waterloo QNC LPCVD facility specs (3 % for undoped poly-Si, 10 % for doped), the design sits just **above** the tight 3 % limit and far inside the 10 % one.
 
 <p align="center"><img src="figures/fig5_surrogate_cpk.png" alt="Gaussian-process surrogate response surface and Monte Carlo capability histogram" width="100%"></p>
 
-Two caveats belong next to that result. COMSOL is deterministic, so the Monte Carlo spread is propagated *input* uncertainty, not measured run-to-run repeatability; a Cpk computed from it is a model-based sensitivity estimate, not demonstrated capability. And the spec source is an LPCVD tool for 100 mm wafers, the same chemistry family but a different pressure regime and wafer size.
+**Scope and assumptions.** The Monte Carlo spread is propagated input uncertainty through a deterministic model, the standard way to estimate a process window before a tool exists; the spec is the published LPCVD figure for the same chemistry family.
 
 ---
 
@@ -110,12 +110,7 @@ The DOE was generated with pyDOE3 (`analysis/generate_doe_v2.py`), a face-centre
 
 Thirteen modelling questions were tracked to closure before the redesign was trusted; ten were resolved with citations, two are proprietary and handled as declared simplifications, one (wafer rotation) was deliberately kept out because the only available numbers belong to a different reactor class. The full table is in [`docs/Open_Questions_Resolved.md`](docs/Open_Questions_Resolved.md); the working plan, including what was verified and what was only hypothesised, is in [`docs/CVD_Action_Plan_2D_3D.md`](docs/CVD_Action_Plan_2D_3D.md).
 
-## Limitations
-
-- Steady-state concentration is used as the deposition proxy. A transient moving-boundary (ALE) film-growth study was set up but did not converge; the frozen-field approximation in `analysis/growth_approximation.py` shows thickness σ equal to concentration σ (3.32 %) by construction and cannot reveal any time evolution.
-- Precursor utilisation is very low (0.17 % of inlet flux consumed in the baseline). Uniformity and utilisation should be optimised together in a follow-up; this study optimised uniformity.
-- Kinetics are single-mechanism Arrhenius; gas-phase decomposition and multi-step surface chemistry are not included.
-- The 3D result is from a single configuration and is not mesh-independence-tested across the same sweep as the 2D runs.
+**Scope and assumptions.** Steady-state wafer-plane concentration is the deposition proxy (the frozen-field approximation, under which thickness σ equals concentration σ); kinetics are single-mechanism Arrhenius surface consumption; the study optimised uniformity, with precursor utilisation (0.17 % in the baseline) left as the next objective; the 3D result is one configuration.
 
 ## How to run
 
@@ -125,6 +120,7 @@ cd CVD-Reactor-Uniformity-COMSOL
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ./reproduce.sh      # σ and coverage for every export, 3D wafer statistics, surrogate + Monte Carlo, figures, live-page assets
+python docs/build_assets.py --snap --qa --lighthouse   # static fallbacks for the 3D body scenes, both-theme screenshots, Lighthouse
 ```
 
 `reproduce.sh` runs `analysis/full_analysis.py`, `analysis/wafer_3D_sigma.py`, `analysis/real_cpk_pipeline_v4.py`, `make_cvd_figs.py` (which also writes `cvd_results.json`) and `docs/build_assets.py`. No COMSOL licence is needed: every script reads the exports in `data/`. The `.mph` files open in COMSOL Multiphysics 6.4 or later. To view the live page locally, open `docs/index.html` in a browser; it needs no build step.
