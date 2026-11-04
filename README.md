@@ -1,4 +1,10 @@
-<p align="center"><img src="hero_cvd.png" alt="CVD reactor uniformity" width="100%"></p>
+<p align="center"><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/"><img src="docs/assets/hero.png" alt="Live page: 3D view of the axisymmetric CVD reactor with the wafer-plane precursor concentration drawn as a height map; scrolling widens the inlet from 10 to 150 mm" width="100%"></a></p>
+
+<div align="center">
+
+### [▶ View the live page](https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/) · scroll to widen the inlet, step through the 14-run DOE, rotate the 3D wafer map
+
+</div>
 
 <div align="center">
 
@@ -7,6 +13,7 @@
 [![DOE](https://img.shields.io/badge/DOE-central%20composite%20(pyDOE3)-0b1220?style=flat-square)](#design-of-experiments)
 [![Surrogate](https://img.shields.io/badge/Surrogate-Gaussian%20process%2C%20LOO%20R%C2%B2%200.94-0b1220?style=flat-square)](#process-capability)
 [![Python](https://img.shields.io/badge/Python-numpy%20%7C%20scikit--learn-0b1220?style=flat-square&logo=python&logoColor=22D3EE)](analysis)
+[![Reproducible](https://img.shields.io/badge/every%20number-reproducible%20with%20one%20script-0b1220?style=flat-square)](docs/CLAIMS.md)
 
 **Soham Kavathekar** · MS Chemical & Biomolecular Engineering, University of Pennsylvania
 [stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-cheme)
@@ -19,7 +26,7 @@
 
 A finite-element model of an atmospheric-pressure CVD reactor depositing polycrystalline silicon from a silane-like precursor onto a **300 mm wafer**, used to find out why the deposit was grossly non-uniform and to redesign the gas inlet until it was not. The work follows the sequence a process engineer would use on a real tool: diagnose the transport regime, fix the geometry, run a designed experiment, fit a surrogate, and estimate process capability against a published film-thickness spec, with the model's limitations stated rather than hidden.
 
-Every number in this README is computed from the COMSOL exports in [`data/`](data) by the scripts in [`analysis/`](analysis). The three `.mph` model files are in [`models/`](models).
+Every number in this README is computed from the COMSOL exports in [`data/`](data) by the scripts in [`analysis/`](analysis); `./reproduce.sh` regenerates all of them and the claim-by-claim audit is in [`docs/CLAIMS.md`](docs/CLAIMS.md). The three `.mph` model files are in [`models/`](models).
 
 | | Before (10 mm inlet) | After (150 mm full-span, 0.07 m/s) |
 |---|---|---|
@@ -27,7 +34,19 @@ Every number in this README is computed from the COMSOL exports in [`data/`](dat
 | Wafer coverage (radius where concentration falls to 10 % of peak) | 16.9 % | 91.9 % |
 | Regime | mass-transfer-limited, precursor starved beyond r ≈ 25 mm | near-uniform supply; edge rise from exhaust proximity |
 
-<p align="center"><img src="figures/fig1_radial_profiles.png" width="100%"></p>
+<p align="center"><img src="figures/fig1_radial_profiles.png" alt="Wafer-plane precursor concentration profiles for the 10 mm inlet, the 150 mm inlet at 0.10 m/s and the 150 mm inlet at 0.07 m/s" width="100%"></p>
+
+### Results at a glance
+
+| Result | Value | Source |
+|---|---|---|
+| Non-uniformity σ, 10 mm inlet (the "before" case) | 179.6 %, coverage 16.9 %, precursor consumed within 25 mm, Da ≈ 13 | `data/old_runs/run1_baseline_radial_profile.csv`, `analysis/full_analysis.py` |
+| Inlet widened to 150 mm, same flow | 6.1 %, coverage 91.9 % | `data/fullspan_baseline_u01_T1000_radial_profile.csv` |
+| 14-run face-centred CCD optimum, 0.07 m/s | 3.3 % | `data/fullspan_run12_u007_T1000_radial_profile.csv` |
+| Temperature sensitivity at 0.05 m/s, 900 / 1000 / 1100 K | 3.29 / 3.38 / 3.44 % | `cvd_results.json` `doe` |
+| Gaussian-process surrogate, leave-one-out R² | 0.944 (second-order polynomial 0.917) | `analysis/real_cpk_pipeline_v4.py` |
+| 10,000-draw Monte Carlo with MFC ±1 % and thermocouple ±5.5 K at 0.06 m/s | expected σ 3.34 %, spread 0.006 % | same |
+| 3D model with three asymmetric exhaust ports | 5.9 % (5 mm rim excluded), 7.9 % full face, 6,012 nodes | `data/wafer_3D_radial_profile.csv`, `analysis/wafer_3D_sigma.py` |
 
 ---
 
@@ -56,13 +75,13 @@ With a 10 mm central inlet the Damköhler number (surface consumption over conve
 
 A face-centred central composite design over u<sub>in</sub> and T<sub>wafer</sub> (14 COMSOL runs on the full-span geometry) shows σ falling from 15.7 % at 0.20 m s⁻¹ to 3.3 % at 0.07 m s⁻¹ and rising again below 0.035 m s⁻¹, while changing T<sub>wafer</sub> by ±100 K moves σ by less than 0.2 percentage points at any velocity. Velocity and temperature are decoupled, which means throughput (set by T through k<sub>s</sub>) can be tuned without spoiling uniformity.
 
-<p align="center"><img src="figures/fig2_doe_response.png" width="100%"></p>
+<p align="center"><img src="figures/fig2_doe_response.png" alt="DOE response: non-uniformity against inlet velocity at three wafer temperatures" width="100%"></p>
 
 ### 3. Two-zone inlets help only when the split is placed correctly
 
 Splitting the inlet at r = 80 mm (an "inward" split) and biasing flow to the outer zone gave σ = 24.8 % at matched total flow, worse than the single full-span inlet. Splitting at the **equal-area radius** (106.07 mm) recovered 8.7 % with the same 0.07/0.03 velocity pair and 3.2 % with equal zone velocities. The equal-area split is the neutral starting point recommended in the methodology notes, not a claimed optimum.
 
-<p align="center"><img src="figures/fig3_architecture_sensitivity.png" width="100%"></p>
+<p align="center"><img src="figures/fig3_architecture_sensitivity.png" alt="Two-zone inlet architectures and sensitivity checks: gap, pressure and rotating disk" width="100%"></p>
 
 The right-hand panel shows the sensitivity checks: a 10 mm gap degrades σ to 10 %, 30 mm changes little, halving pressure at low velocity is mildly worse than 1 atm, and a rotating-disk configuration at 500 rpm is a different reactor class that does not transfer to this geometry (14.7 %).
 
@@ -70,13 +89,13 @@ The right-hand panel shows the sensitivity checks: a 10 mm gap degrades σ to 10
 
 A 3D model with three discrete exhaust ports (a real reactor is built that way) reproduces the radial trend but adds an azimuthal ripple of about ±10 % at mid-radius, tied to the port positions. The wafer-face coefficient of variation is **7.9 % over the full face and 5.9 % excluding a 5 mm edge rim** (6,012 surface nodes). This is a surface (over-area) statistic and is not the same metric as the 1D radial σ of the 2D runs; the two should not be compared as if they were.
 
-<p align="center"><img src="figures/fig4_3d_wafer_map.png" width="100%"></p>
+<p align="center"><img src="figures/fig4_3d_wafer_map.png" alt="3D wafer-face concentration map with three exhaust ports" width="100%"></p>
 
 ### 5. Process capability, labelled for what it is
 
 A Gaussian-process surrogate fitted to the 14 DOE runs validates at **leave-one-out R² = 0.944** (a second-order polynomial gives 0.917). Propagating sourced equipment tolerances through it (mass-flow controller ±1 % of setpoint, Type K class 2 thermocouple ±5.5 K at 1000 K) with 10,000 Monte Carlo draws at u<sub>in</sub> = 0.06 m s⁻¹ gives a predicted σ of 3.34 % with a spread of only 0.006 %. Against the University of Waterloo QNC LPCVD facility specs (3 % for undoped poly-Si, 10 % for doped), the design sits just **above** the tight 3 % limit and far inside the 10 % one.
 
-<p align="center"><img src="figures/fig5_surrogate_cpk.png" width="100%"></p>
+<p align="center"><img src="figures/fig5_surrogate_cpk.png" alt="Gaussian-process surrogate response surface and Monte Carlo capability histogram" width="100%"></p>
 
 Two caveats belong next to that result. COMSOL is deterministic, so the Monte Carlo spread is propagated *input* uncertainty, not measured run-to-run repeatability; a Cpk computed from it is a model-based sensitivity estimate, not demonstrated capability. And the spec source is an LPCVD tool for 100 mm wafers, the same chemistry family but a different pressure regime and wafer size.
 
@@ -97,29 +116,39 @@ Thirteen modelling questions were tracked to closure before the redesign was tru
 - Kinetics are single-mechanism Arrhenius; gas-phase decomposition and multi-step surface chemistry are not included.
 - The 3D result is from a single configuration and is not mesh-independence-tested across the same sweep as the 2D runs.
 
-## Reproduce
+## How to run
 
 ```bash
 git clone https://github.com/Soham-ChemE/CVD-Reactor-Uniformity-COMSOL.git
 cd CVD-Reactor-Uniformity-COMSOL
-pip install numpy scipy scikit-learn matplotlib pyDOE3
-python analysis/full_analysis.py          # σ and coverage for every exported profile
-python analysis/wafer_3D_sigma.py         # 3D wafer-face statistics
-python analysis/real_cpk_pipeline_v4.py   # surrogate, LOO validation, Monte Carlo, Cpk
-python make_cvd_figs.py                   # regenerates every figure above
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+./reproduce.sh      # σ and coverage for every export, 3D wafer statistics, surrogate + Monte Carlo, figures, live-page assets
 ```
 
-The `.mph` files open in COMSOL Multiphysics 6.4 or later.
+`reproduce.sh` runs `analysis/full_analysis.py`, `analysis/wafer_3D_sigma.py`, `analysis/real_cpk_pipeline_v4.py`, `make_cvd_figs.py` (which also writes `cvd_results.json`) and `docs/build_assets.py`. No COMSOL licence is needed: every script reads the exports in `data/`. The `.mph` files open in COMSOL Multiphysics 6.4 or later. To view the live page locally, open `docs/index.html` in a browser; it needs no build step.
 
 ```
 CVD-Reactor-Uniformity-COMSOL/
+├── reproduce.sh     one-command reproduction
 ├── models/          CVD_Reactor_Run1_Baseline.mph, CVD_Reactor_SingleZone_Complete*.mph
-├── data/            COMSOL exports: wafer-plane profiles, temperature fields, 3D wafer surface, DOE design
+├── data/            COMSOL exports: wafer-plane profiles, temperature profiles, 3D wafer surface, DOE design
 │   └── old_runs/    original 10 mm inlet geometry (the "before" case)
 ├── analysis/        σ / coverage, DOE generation, surrogate + Monte Carlo Cpk, growth approximation
-├── docs/            methodology notes and the sourcing table
+├── docs/            live page (index.html, build_assets.py, CLAIMS.md), methodology notes and the sourcing table
 ├── figures/         generated figures
 └── make_cvd_figs.py
+```
+
+## Citation
+
+```bibtex
+@misc{kavathekar2026cvd,
+  author = {Kavathekar, Soham},
+  title  = {CVD reactor uniformity: inlet redesign, designed experiment and process-capability analysis for poly-Si deposition on a 300 mm wafer (COMSOL)},
+  year   = {2026},
+  url    = {https://github.com/Soham-ChemE/CVD-Reactor-Uniformity-COMSOL}
+}
 ```
 
 ## Framing for different audiences
