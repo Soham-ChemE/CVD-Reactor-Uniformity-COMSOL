@@ -108,3 +108,47 @@ fig.text(0.05, 0.62, "COMSOL model of a 300 mm showerhead reactor:\ndiagnose, re
 fig.text(0.05, 0.36, f"Non-uniformity {stats['sigma_before']:.0f} % → {stats['sigma_opt']:.1f} %\nCoverage {stats['cov_before']:.0f} % → {stats['cov_after']:.0f} %\nGaussian-process surrogate, LOO R² {stats['gp_loo_r2']:.3f}", color="#22d3ee", fontsize=14, va="top")
 fig.text(0.05, 0.10, "Soham Kavathekar  |  github.com/Soham-ChemE", color="#8b98a9", fontsize=12)
 fig.savefig(os.path.join(OUT, "social-preview.png"), dpi=100, facecolor=DARK); plt.close(fig); print("wrote social-preview.png")
+
+# ---------------- animated README hero (SVG with CSS keyframes; GitHub renders these through <img>) ----------------
+# The wafer-plane profile cycles through the three measured states (10 mm inlet; full-span at 0.10 m/s; full-span at 0.07 m/s)
+# by cross-fading three exported profiles, with the sigma readout changing in step. No SMIL, no scripts, no fonts.
+PX, PY, PW, PH = 930, 70, 580, 360
+def _x(r): return PX + min(r, 138) / 138 * PW
+def _y(c): return PY + PH - min(c, 1.6) / 1.6 * PH
+states = [("before", "10 mm inlet · 0.10 m/s", "#f87171"), ("after", "150 mm inlet · 0.10 m/s", "#f59e0b"), ("optimum", "150 mm inlet · 0.07 m/s", "#34d399")]
+paths = ""; css = ""
+for i, (k, lab, col) in enumerate(states):
+    rc = profiles[k]["rc"]; d = "M " + " L ".join(f"{_x(r):.1f} {_y(c):.1f}" for r, c in rc)
+    area = d + f" L {_x(rc[-1][0]):.1f} {PY + PH} L {_x(rc[0][0]):.1f} {PY + PH} Z"
+    paths += f'<g class="pr p{i}"><path d="{area}" fill="{col}" opacity=".12"/><path d="{d}" fill="none" stroke="{col}" stroke-width="3.5" stroke-linejoin="round"/>'
+    paths += f'<text class="t rd" x="{PX + 16}" y="{PY + 40}" fill="{col}">σ = {profiles[k]["sigma"]:.1f} %</text><text class="t rl" x="{PX + 16}" y="{PY + 62}">{lab} · coverage {profiles[k]["coverage_pct"]:.0f} %</text></g>'
+    css += f".p{i}{{animation-delay:{i * 4:.0f}s}}\n"
+lines = [("179.6 % → 3.3 %", "within-wafer non-uniformity, 10 mm inlet to full-span inlet at 0.07 m/s"), ("17 % → 92 %", "wafer coverage; the fix was the gas inlet, not the chemistry"),
+         (f"{stats['n_doe']} COMSOL runs", "face-centred design over inlet velocity and wafer temperature"), (f"R² = {stats['gp_loo_r2']:.3f}", "leave-one-out, Gaussian-process surrogate on the 14 runs")]
+stat_svg = "".join(f'<g class="st s{i}"><text x="80" y="268" class="big">{a}</text><text x="80" y="300" class="small">{b}</text></g>' for i, (a, b) in enumerate(lines))
+svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="1600" height="500" role="img" aria-label="CVD reactor uniformity: the wafer-plane precursor profile cycling through the 10 mm inlet, the full-span inlet at 0.10 m/s and the full-span inlet at 0.07 m/s, with the non-uniformity readout, next to the headline numbers">
+<style>
+.t{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}}
+.h{{font-size:54px;font-weight:800;fill:#e6edf3;letter-spacing:-1.5px}}.sub{{font-size:21px;fill:#8b98a9}}.big{{font-size:34px;font-weight:800;fill:#22d3ee}}.small{{font-size:16px;fill:#8b98a9}}.foot{{font-size:15px;fill:#5b6676}}.ax{{font-size:13px;fill:#8b98a9}}.rd{{font-size:30px;font-weight:800}}.rl{{font-size:14px;fill:#8b98a9}}
+.pr{{opacity:0;animation:cyc3 12s infinite}}
+@keyframes cyc3{{0%{{opacity:0}}6%{{opacity:1}}30%{{opacity:1}}36%{{opacity:0}}100%{{opacity:0}}}}
+{css}
+.st{{opacity:0;animation:cycle 16s infinite}}.s1{{animation-delay:4s}}.s2{{animation-delay:8s}}.s3{{animation-delay:12s}}
+@keyframes cycle{{0%,22%{{opacity:1}}25%,97%{{opacity:0}}100%{{opacity:1}}}}
+@media (prefers-reduced-motion:reduce){{.pr,.st{{animation:none}}.p2,.s0{{opacity:1}}}}
+</style>
+<rect width="1600" height="500" fill="#0b1220"/>
+<g class="t">
+<text x="80" y="120" class="h">180 % non-uniform.</text><text x="80" y="178" class="h">Then 3.3 %.</text>
+<text x="80" y="218" class="sub">COMSOL model of an atmospheric-pressure CVD reactor, poly-Si on a 300 mm wafer</text>
+{stat_svg}
+<text x="80" y="420" class="foot">Every number from the exported COMSOL wafer-plane profiles in the repository, in one command</text>
+<text x="80" y="446" class="foot">Right: precursor concentration over its mean against wafer radius, three states · open the live page for the 3D reactor</text>
+<rect x="{PX}" y="{PY}" width="{PW}" height="{PH}" fill="none" stroke="#1f2a3c"/>
+<text x="{PX + PW / 2}" y="{PY + PH + 28}" class="ax" text-anchor="middle">wafer radius, 0 → 138 mm</text>
+<text x="{PX - 12}" y="{PY + PH / 2}" class="ax" text-anchor="middle" transform="rotate(-90 {PX - 12} {PY + PH / 2})">concentration / mean, 0 → 1.6 (clipped)</text>
+{paths}
+</g>
+</svg>"""
+with open(os.path.join(OUT, "hero.svg"), "w", encoding="utf-8") as f: f.write(svg)
+print("wrote hero.svg", os.path.getsize(os.path.join(OUT, "hero.svg")), "bytes")
