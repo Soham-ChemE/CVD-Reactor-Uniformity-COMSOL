@@ -13,10 +13,8 @@ const interp = (rc, r) => { let i = 1; while (i < rc.length - 1 && rc[i][0] < r)
   const canvas = document.getElementById('heroCanvas'); if (!canvas) return;
   const st = createStage(canvas, { fov: 38, bloom: { strength: .3, radius: .45, threshold: .88 }, dof: { aperture: .0004, maxblur: .003 }, exposure: 1.0, envIntensity: .5 });
   if (st.failed) return; const { scene, camera } = st;
-  // dark stage in both themes so the height map and streamlines read (the page shade blends it into the page colour)
-  const stageBg = () => { scene.background = new THREE.Color(S.isDark() ? '#0b1220' : '#111a2b'); st.dirty = true; }; stageBg();
   const ctr = new OrbitControls(camera, canvas); ctr.enableDamping = true; ctr.enableZoom = false; ctr.enablePan = false; ctr.autoRotate = !reduced; ctr.autoRotateSpeed = .45; ctr.minPolarAngle = .85; ctr.maxPolarAngle = 1.45;
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x223355, .9)); const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(4, 8, 5); scene.add(dl);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, .9); scene.add(hemi); const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(4, 8, 5); scene.add(dl);
   const g = new THREE.Group(); scene.add(g); const SC = 20; const WR = 0.15 * SC, GAP = 0.02 * SC * 2.5; // 300 mm wafer = 6 units; gap exaggerated 2.5x for legibility
   const chamber = new THREE.Mesh(new THREE.CylinderGeometry(0.2 * SC, 0.2 * SC, GAP + 1.6, 64, 1, true), new THREE.MeshStandardMaterial({ color: 0x8b98a9, transparent: true, opacity: .06, side: THREE.DoubleSide, depthWrite: false })); chamber.position.y = (GAP + 1.6) / 2 - .3; g.add(chamber);
   const wafer = new THREE.Mesh(new THREE.CylinderGeometry(WR, WR, .06, 96), new THREE.MeshStandardMaterial({ color: 0x5b6676, metalness: .7, roughness: .3 })); wafer.position.y = -.03; g.add(wafer);
@@ -53,7 +51,7 @@ const interp = (rc, r) => { let i = 1; while (i < rc.length - 1 && rc[i][0] < r)
   const NPART = phone ? 90 : 170, pg = new THREE.SphereGeometry(.028, 6, 5), pmat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: .8, transparent: true, opacity: .6 }); const parts = new THREE.InstancedMesh(pg, pmat, NPART); g.add(parts);
   const rnd = (() => { let s = 3; return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; })(); const P = []; for (let i = 0; i < NPART; i++) P.push({ t: rnd(), th: rnd() * Math.PI * 2, f: rnd() }); const m4 = new THREE.Matrix4();
   function stepParts(dt) { const p0 = Math.max(0, morph); const w = (p0 < 1 ? 10 + 140 * p0 : 150) / 1000 * SC / 2; const speed = p0 < 1 ? .35 : .35 * (1 - .3 * (p0 - 1)); for (let n = 0; n < NPART; n++) { const p = P[n]; p.t += dt * speed; if (p.t > 1) { p.t = 0; p.th = rnd() * Math.PI * 2; p.f = rnd(); } const r0 = p.f * w; let x, y, z; if (p.t < .4) { const u = p.t / .4; y = GAP - (GAP - .12) * u; x = Math.cos(p.th) * r0; z = Math.sin(p.th) * r0; } else { const u = (p.t - .4) / .6; const r = r0 + (0.2 * SC - r0) * u; y = .12 + .25 * u; x = Math.cos(p.th) * r; z = Math.sin(p.th) * r; } m4.makeTranslation(x, y, z); parts.setMatrixAt(n, m4); } parts.instanceMatrix.needsUpdate = true; }
-  st.onTheme = () => { stageBg(); };
+  st.onTheme = () => { hemi.intensity = .9 * st.lights; dl.intensity = 1.4 * st.lights; st.dirty = true; }; st.onTheme();
   // layout and the scroll-scrubbed camera: overview, then low across the wafer, then above the showerhead looking down at the flat map
   const wide = () => st.wide !== false;
   function layout() { const w = wide(); g.position.set(w ? 2.2 : 0, w ? -.6 : .9, 0); g.scale.setScalar(w ? 1 : .72); }
@@ -71,7 +69,7 @@ const interp = (rc, r) => { let i = 1; while (i < rc.length - 1 && rc[i][0] < r)
     if (!dragging && camera.position.distanceToSquared(pos3) > 1e-6) { camera.position.lerp(pos3, reduced ? 1 : .08); changed = true; }
     ctr.target.lerp(tgt3, .08); ctr.autoRotate = !reduced && T < .06 && !dragging; if (ctr.autoRotate || dragging) changed = true; ctr.update();
     if (!reduced) { stepParts(dt); changed = true; }
-    if (st.bloom) st.bloom.strength = .25 + .2 * S.hero.glow; if (st.bokeh) st.bokeh.uniforms.focus.value = camera.position.distanceTo(ctr.target);
+    st.setBloom(.25 + .2 * S.hero.glow); if (st.bokeh) st.bokeh.uniforms.focus.value = camera.position.distanceTo(ctr.target);
     if (Math.abs(T - lastT) > 1e-4) { lastT = T; changed = true; }
     return changed;
   });
@@ -82,7 +80,7 @@ const interp = (rc, r) => { let i = 1; while (i < rc.length - 1 && rc[i][0] < r)
   const canvas = document.getElementById('waferCanvas'); if (!canvas) return;
   const st = createStage(canvas, { fov: 36, envIntensity: .6 }); if (st.failed) return; const { scene, camera } = st; camera.position.set(0, 4.2, 6.2);
   const ctr = new OrbitControls(camera, canvas); ctr.enableDamping = true; ctr.enableZoom = false; ctr.enablePan = false; ctr.autoRotate = !reduced; ctr.autoRotateSpeed = .8; ctr.maxPolarAngle = 1.4;
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x223355, .9)); const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(3, 6, 4); scene.add(dl);
+  const hemi2 = new THREE.HemisphereLight(0xffffff, 0x223355, .9); scene.add(hemi2); const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(3, 6, 4); scene.add(dl); st.onTheme = () => { hemi2.intensity = .9 * st.lights; dl.intensity = 1.2 * st.lights; st.dirty = true; }; st.onTheme();
   const W = D.wafer3d, n = W.n, SC = 20, HS = 2.2; const pos = new Float32Array(n * 3), col = new Float32Array(n * 3); const cm = W.c_mean;
   let lo = 1e9, hi = -1e9; for (let i = 0; i < n; i++) { const v = W.c[i] / cm; lo = Math.min(lo, v); hi = Math.max(hi, v); }
   for (let i = 0; i < n; i++) { const v = W.c[i] / cm; pos[3 * i] = W.x[i] / 1000 * SC; pos[3 * i + 2] = -W.y[i] / 1000 * SC; pos[3 * i + 1] = (v - lo) / (hi - lo) * HS; const c = viridis((v - lo) / (hi - lo)); col[3 * i] = c[0]; col[3 * i + 1] = c[1]; col[3 * i + 2] = c[2]; }
