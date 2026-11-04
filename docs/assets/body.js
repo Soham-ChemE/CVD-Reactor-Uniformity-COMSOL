@@ -19,13 +19,13 @@ Viz.view('[data-viz="reactor"]', v => {
   const plenum = new THREE.Mesh(new THREE.CylinderGeometry(WR + .4, WR + .4, .3, 64), Viz.mat('steel', { metalness: .6, roughness: .4 })); plenum.position.y = gap + .5;
   const exhaust = new THREE.Mesh(new THREE.TorusGeometry(WR + .95, .09, 12, 64), Viz.mat('hot', { emissive: 'hot', emissiveIntensity: .3 })); exhaust.rotation.x = Math.PI / 2; exhaust.position.y = .25;
   const ex = Viz.exploded(v, [{ mesh: susc, from: [0, -1.6, 0], delay: 0, span: .25 }, { mesh: wafer, from: [0, -1.2, 0], delay: .12, span: .25 }, { mesh: exhaust, from: [2, 0, 0], delay: .28, span: .25 }, { mesh: wall, from: [0, 1.2, 0], delay: .38, span: .3 }, { mesh: plenum, from: [0, 2.2, 0], delay: .5, span: .3 }, { mesh: head, from: [0, 1.6, 0], delay: .55, span: .3 }]);
-  const labels = [[`300 mm wafer on the susceptor`, [0, -.55, WR + .4], .15], [`${G.gap_mm} mm wafer-to-inlet gap`, [WR + .7, gap / 2, .6], .45], ['sidewall exhaust slit', [WR + 1.3, .45, -.6], .4], ['showerhead inlet: 10 mm → 150 mm', [0, gap + 1.0, .8], .7]];
+  const labels = [[`300 mm wafer on the susceptor`, [0, -.6, WR + .5], .15], [`${G.gap_mm} mm wafer-to-inlet gap`, [WR + 1.4, gap / 2, .4], .45], ['sidewall exhaust slit', [-WR - 1.3, .3, .8], .4], ['showerhead inlet: 10 mm → 150 mm', [0, gap + 1.15, .9], .7]];
   const labs = labels.map(([t, p, d]) => { const s = Viz.label(v, t, p, { px: 20, scale: .09 }); s.userData.d = d; return s; });
   const cls = () => { v.pal && head.material.color.set(v.pal.blue); };
   v.update = vv => { ex.draw(vv.p); const w = G.inlet_before_mm + (G.inlet_after_mm - G.inlet_before_mm) * Math.max(0, Math.min(1, (vv.p - .78) / .2)); const r = w / 2 * SC; head.scale.set(r / (G.inlet_before_mm / 2 * SC), 1, r / (G.inlet_before_mm / 2 * SC)); labs.forEach(l => l.material.opacity = Math.max(0, (vv.p - l.userData.d - .15) * 4)); labs[3].material.opacity *= 1; return false; };
   v.hover = () => null; cls();
   v.spin = .1; v.tilt = .25;
-}, { camera: [0, 2.2, 7.4], target: [0, .4, 0], fov: 34 });
+}, { camera: [0, 3.6, 10.5], target: [0, .5, 0], fov: 32 });
 
 /* ---------- 2. the three profiles ---------- */
 Viz.view('[data-viz="profiles"]', v => {
