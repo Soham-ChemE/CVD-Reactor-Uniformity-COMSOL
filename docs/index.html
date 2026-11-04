@@ -10,57 +10,32 @@
 <meta property="og:image" content="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/assets/social-preview.png">
 <meta name="theme-color" content="#0b1220">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23f59e0b'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%230b1220'/%3E%3C/svg%3E">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<style>
-:root{--bg:#f6f8fb;--bg2:#ffffff;--ink:#0b1220;--muted:#5b6676;--line:#dfe5ee;--acc:#d97706;--acc2:#0891b2;--card:#ffffff;--shadow:0 10px 40px rgba(11,18,32,.08);--bad:#dc2626;--good:#059669}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--bg2:#0f172a;--ink:#e6edf3;--muted:#8b98a9;--line:#1f2a3c;--acc:#f59e0b;--acc2:#22d3ee;--card:#111a2b;--shadow:0 10px 40px rgba(0,0,0,.4);--bad:#f87171;--good:#34d399}}
-:root[data-theme="dark"]{--bg:#0b1220;--bg2:#0f172a;--ink:#e6edf3;--muted:#8b98a9;--line:#1f2a3c;--acc:#f59e0b;--acc2:#22d3ee;--card:#111a2b;--shadow:0 10px 40px rgba(0,0,0,.4);--bad:#f87171;--good:#34d399}
-*{box-sizing:border-box}html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
-a{color:var(--acc2);text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
-nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--line)}
-nav .wrap{display:flex;align-items:center;gap:18px;height:52px}nav .brand{font-weight:700;color:var(--ink)}
-nav .links{display:flex;gap:16px;margin-left:auto;font-size:14px}nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink);text-decoration:none}
-@media (max-width:640px){nav .links a.hide-sm{display:none}}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:600;font-size:15px;border:0;cursor:pointer}.btn:hover{text-decoration:none;opacity:.9}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:15px}
-.hero-track{height:220vh;position:relative}.hero{position:sticky;top:0;height:100vh;overflow:hidden}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hero .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 42%,color-mix(in srgb,var(--bg) 80%,transparent) 76%,var(--bg) 100%)}
-.hero .copy{position:absolute;left:0;right:0;bottom:9vh;pointer-events:none}
-.hero h1{font-size:clamp(32px,5.4vw,68px);line-height:1.02;letter-spacing:-.03em;margin:0 0 14px;max-width:15ch;font-weight:800}
-.hero p{font-size:clamp(16px,1.6vw,20px);color:var(--muted);max-width:56ch;margin:0 0 20px}
-.hero .cta{pointer-events:auto;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.readout{position:absolute;right:16px;top:66px;background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--line);border-radius:16px;padding:12px 14px;backdrop-filter:blur(8px);min-width:230px;font-size:13px;color:var(--muted)}
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js">
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js"></script>
+<script defer src="assets/data.js"></script>
+<script defer src="assets/site.js"></script>
+<script type="module" src="assets/scene.js"></script>
+<style>.readout{position:absolute;right:16px;top:66px;background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--line);border-radius:16px;padding:12px 14px;backdrop-filter:blur(8px);min-width:230px;font-size:13px;color:var(--muted)}
 .readout .big{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
 .readout .row{display:flex;justify-content:space-between;gap:12px;margin-top:6px}.readout b{color:var(--ink)}
 .readout .track{height:6px;border-radius:3px;background:var(--line);margin:10px 0 2px;overflow:hidden}.readout .track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--bad),var(--good))}
-.scrollhint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-@media (max-width:640px){.readout{top:60px;right:8px;left:8px;min-width:0;padding:8px 10px}.readout .big{font-size:24px}.hero-track{height:200vh}.hero .copy{bottom:5vh}}
-.stats{position:relative;z-index:2;background:var(--bg);border-top:1px solid var(--line)}.stats .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:44px 0}@media (max-width:760px){.stats .grid{grid-template-columns:repeat(2,1fr)}}
-.stat .n{font-size:clamp(34px,4.6vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1}.stat .n small{font-size:.45em;color:var(--muted);font-weight:600;margin-left:3px}.stat .l{color:var(--muted);font-size:14px;margin-top:8px}
-section.story{position:relative;z-index:2;background:var(--bg);padding:84px 0}section.story.alt{background:var(--bg2)}
-.eyebrow{color:var(--acc);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin-bottom:12px}
-h2{font-size:clamp(28px,4vw,46px);letter-spacing:-.03em;line-height:1.08;margin:0 0 18px;max-width:24ch}.lead{font-size:clamp(17px,1.5vw,20px);color:var(--muted);max-width:62ch;margin:0 0 28px}
-.two{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}@media (max-width:820px){.two{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}.card img{width:100%;height:auto;display:block}
-table{width:100%;border-collapse:collapse;font-size:14.5px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600;font-size:13px}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}tr.hl td{color:var(--good);font-weight:700}
-.tablewrap{overflow-x:auto}
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.reveal.in{opacity:1;transform:none}.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
-.sticky-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}@media (max-width:820px){.sticky-wrap{grid-template-columns:1fr}}
-.sticky-fig{position:sticky;top:72px;align-self:start;border-radius:24px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);padding:20px}
 .sticky-fig h4{margin:0 0 4px;font-size:15px}.sticky-fig .sub{color:var(--muted);font-size:13px;margin-bottom:10px}.sticky-fig canvas{width:100%;height:300px;display:block}
 .sticky-fig .sig{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:10px;font-variant-numeric:tabular-nums}.sticky-fig .sig small{font-size:14px;color:var(--muted);font-weight:600;margin-left:6px}
-.steps{display:flex;flex-direction:column;gap:30vh;padding:12vh 0 26vh}@media (max-width:820px){.steps{gap:16vh;padding:6vh 0 12vh}.sticky-fig{top:60px}.sticky-fig canvas{height:200px}}
-.step{opacity:.35;transition:opacity .4s}.step.active{opacity:1}.step h3{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.02em;margin:0 0 10px}.step p{color:var(--muted);margin:0 0 10px;font-size:17px}
 .w3d{height:min(70vh,520px);border-radius:24px;overflow:hidden;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);position:relative}.w3d canvas{width:100%;height:100%;display:block}
 .w3d .tag{position:absolute;left:14px;top:12px;font-size:13px;color:var(--muted)}.w3d .tag b{display:block;color:var(--ink);font-size:17px}
-pre{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;overflow:auto;font-size:13.5px;line-height:1.55}code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.note{font-size:13px;color:var(--muted)}
-footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:14px}footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+:root{--bad:#dc2626;--good:#059669}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bad:#f87171;--good:#34d399}}
+:root[data-theme="dark"]{--bad:#f87171;--good:#34d399}
+tr.hl td{color:var(--good);font-weight:700}
+.readout{background:var(--glass)}
+@media (max-width:640px){.readout{top:60px;right:8px;left:8px;min-width:0;padding:8px 10px}.readout .big{font-size:24px}}
+.sticky-fig{padding:18px;height:auto;min-height:0}@media (max-width:820px){.sticky-fig{height:auto}}
 </style>
+<noscript><style>.hero .fallback{opacity:1}.reveal{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
 <nav><div class="wrap"><a class="brand" href="#top">CVD reactor uniformity</a>
@@ -68,9 +43,10 @@ footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid va
 <button class="toggle" id="themeBtn" aria-label="Toggle dark or light theme" title="Toggle theme">◐</button></div></nav>
 
 <div class="hero-track" id="top"><div class="hero">
-<canvas id="heroCanvas" role="img" aria-label="3D view of the axisymmetric CVD reactor: showerhead inlet above a 300 mm wafer, with the precursor concentration at the wafer plane drawn as a height map. Scrolling widens the inlet from 10 to 150 mm and the height map flattens from 180 percent to 6 percent non-uniformity."></canvas>
+<canvas id="heroCanvas" role="img" aria-label="3D view of the axisymmetric CVD reactor: showerhead inlet above a 300 mm wafer, with the precursor concentration at the wafer plane drawn as a height map. Scrolling widens the inlet from 10 to 150 mm and then slows it from 0.10 to 0.07 m/s; the height map flattens from 180 percent through 6.1 to 3.3 percent non-uniformity."></canvas>
+<img class="fallback" alt="" data-src="assets/hero.png" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
 <div class="shade"></div>
-<div class="readout" aria-live="polite"><div>Within-wafer non-uniformity σ</div><div class="big" id="roSigma">179.6 %</div><div class="track"><i id="roBar"></i></div><div class="row"><span>inlet width <b id="roInlet">10 mm</b></span><span>coverage <b id="roCov">17 %</b></span></div><div class="row"><span id="roHint">scroll to widen the inlet</span></div></div>
+<div class="readout" aria-live="polite"><div>Within-wafer non-uniformity σ</div><div class="big" id="roSigma">179.6 %</div><div class="track"><i id="roBar"></i></div><div class="row"><span>inlet width <b id="roInlet">10 mm</b></span><span>coverage <b id="roCov">17 %</b></span></div><div class="row"><span>inlet velocity <b id="roU">0.10 m/s</b></span></div><div class="row"><span id="roHint">scroll to widen the inlet</span></div></div>
 <div class="copy"><div class="wrap">
 <h1>180 % non-uniform. Then 3.3 %.</h1>
 <p>A COMSOL model of an atmospheric-pressure CVD reactor depositing poly-Si on a 300 mm wafer. The deposit was starved beyond 25 mm of radius; the fix was the gas inlet, not the chemistry. Then a designed experiment, a validated surrogate and a capability estimate, with the caveats left in.</p>
@@ -78,11 +54,11 @@ footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid va
 </div></div><div class="scrollhint">Scroll</div>
 </div></div>
 
-<div class="stats"><div class="wrap"><div class="grid">
+<div class="stats over"><div class="wrap"><div class="grid">
 <div class="stat reveal"><div class="n" data-count="3.3" data-format="1">0.0<small>%</small></div><div class="l">non-uniformity after redesign at 0.07 m/s, from 179.6 %</div></div>
-<div class="stat reveal d1"><div class="n" data-count="92" data-format="int">0<small>%</small></div><div class="l">wafer coverage, from 17 %</div></div>
-<div class="stat reveal d2"><div class="n" data-count="0.944" data-format="3">0.000</div><div class="l">leave-one-out R² of the Gaussian-process surrogate on 14 COMSOL runs</div></div>
-<div class="stat reveal d3"><div class="n" data-count="5.9" data-format="1">0.0<small>%</small></div><div class="l">wafer-face CV in the 3D model with three asymmetric exhaust ports (5 mm rim excluded)</div></div>
+<div class="stat reveal"><div class="n" data-count="92" data-format="int">0<small>%</small></div><div class="l">wafer coverage, from 17 %</div></div>
+<div class="stat reveal"><div class="n" data-count="0.944" data-format="3">0.000</div><div class="l">leave-one-out R² of the Gaussian-process surrogate on 14 COMSOL runs</div></div>
+<div class="stat reveal"><div class="n" data-count="5.9" data-format="1">0.0<small>%</small></div><div class="l">wafer-face CV in the 3D model with three asymmetric exhaust ports (5 mm rim excluded)</div></div>
 </div></div></div>
 
 <section class="story" id="diagnosis"><div class="wrap">
@@ -91,7 +67,7 @@ footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid va
 <p class="lead reveal">With a 10 mm central inlet the Damköhler number, surface consumption over convective supply, sat above 10. The precursor was consumed within the first 25 mm of radius and the outer 83 % of the wafer saw almost nothing. Widening the inlet to the wafer diameter, the ratio a Mitsubishi Electric gas-head patent uses, cut σ from 179.6 % to 6.1 % and raised coverage from 17 % to 92 % at the same flow. Nothing else changed.</p>
 <div class="two">
 <div class="card reveal"><img data-fig="fig_profiles" alt="Wafer-plane precursor concentration normalised by its mean against wafer radius for the 10 mm inlet, the 150 mm full-span inlet at 0.10 m/s and the full-span inlet at 0.07 m/s. The 10 mm inlet peaks at the centre and falls to near zero beyond 25 mm; the full-span profiles are flat." src="assets/fig_profiles_dark.svg"></div>
-<div class="tablewrap reveal d1"><table><thead><tr><th></th><th class="num">10 mm inlet</th><th class="num">150 mm, 0.10 m/s</th><th class="num">150 mm, 0.07 m/s</th></tr></thead><tbody>
+<div class="tablewrap reveal"><table><thead><tr><th></th><th class="num">10 mm inlet</th><th class="num">150 mm, 0.10 m/s</th><th class="num">150 mm, 0.07 m/s</th></tr></thead><tbody>
 <tr><td>σ, coefficient of variation of wafer-plane concentration (r ≤ 138 mm)</td><td class="num" style="color:var(--bad)">179.6 %</td><td class="num">6.1 %</td><td class="num" style="color:var(--good)">3.3 %</td></tr>
 <tr><td>Coverage: radius where c falls to 10 % of peak</td><td class="num">16.9 %</td><td class="num">91.9 %</td><td class="num">91.9 %</td></tr>
 <tr><td>Regime</td><td class="num">mass-transfer limited, Da ≈ 13</td><td class="num">near-uniform supply</td><td class="num">edge rise from exhaust only</td></tr>
@@ -106,12 +82,12 @@ footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid va
 <div class="sticky-wrap">
 <div class="sticky-fig"><h4 id="sfTitle">Wafer-plane profile</h4><div class="sub" id="sfSub">u_in = 0.20 m/s, T_wafer = 1000 K</div><canvas id="profCanvas" role="img" aria-label="Line chart of normalised precursor concentration against wafer radius for the selected DOE run"></canvas><div class="sig"><span id="sfSigma">15.7</span><small>% σ</small></div></div>
 <div class="steps" id="steps">
-<div class="step active" data-u="0.2" data-t="1000"><h3>0.20 m/s: too fast</h3><p>At the top of the design the jet from the showerhead overshoots the centre and the profile tilts: σ = 15.7 %.</p></div>
-<div class="step" data-u="0.125" data-t="1000"><h3>0.125 m/s: the design centre</h3><p>Halfway down the velocity range σ is 6.1 %, the same as the first full-span run. Temperature at 900 or 1100 K moves it by 0.1 point.</p></div>
-<div class="step" data-u="0.07" data-t="1000"><h3>0.07 m/s: the optimum</h3><p>σ = 3.3 % with 92 % coverage. The residual is an edge rise from the proximity of the exhaust slit, not starvation.</p></div>
-<div class="step" data-u="0.035" data-t="1000"><h3>0.035 m/s: starting to starve</h3><p>Below the optimum the supply thins and σ climbs back to 4.3 %.</p></div>
-<div class="step" data-u="0.02" data-t="1000"><h3>0.02 m/s: starved again</h3><p>σ = 7.7 %. The window is 0.035 to 0.10 m/s, and inside it temperature can be used to set throughput through the surface rate constant without spoiling uniformity.</p></div>
-<div class="step" data-u="0.05" data-t="900"><h3>Temperature: 900 → 1100 K at 0.05 m/s</h3><p>σ = 3.29, 3.38 and 3.44 %. Velocity and temperature are decoupled, which is the result a process engineer wants: one knob for uniformity, one for rate.</p></div>
+<div class="step active" data-step="0.2|1000"><h3>0.20 m/s: too fast</h3><p>At the top of the design the jet from the showerhead overshoots the centre and the profile tilts: σ = 15.7 %.</p></div>
+<div class="step" data-step="0.125|1000"><h3>0.125 m/s: the design centre</h3><p>Halfway down the velocity range σ is 6.1 %, the same as the first full-span run. Temperature at 900 or 1100 K moves it by 0.1 point.</p></div>
+<div class="step" data-step="0.07|1000"><h3>0.07 m/s: the optimum</h3><p>σ = 3.3 % with 92 % coverage. The residual is an edge rise from the proximity of the exhaust slit, not starvation.</p></div>
+<div class="step" data-step="0.035|1000"><h3>0.035 m/s: starting to starve</h3><p>Below the optimum the supply thins and σ climbs back to 4.3 %.</p></div>
+<div class="step" data-step="0.02|1000"><h3>0.02 m/s: starved again</h3><p>σ = 7.7 %. The window is 0.035 to 0.10 m/s, and inside it temperature can be used to set throughput through the surface rate constant without spoiling uniformity.</p></div>
+<div class="step" data-step="0.05|900"><h3>Temperature: 900 → 1100 K at 0.05 m/s</h3><p>σ = 3.29, 3.38 and 3.44 %. Velocity and temperature are decoupled, which is the result a process engineer wants: one knob for uniformity, one for rate.</p></div>
 </div></div>
 <div class="card reveal" style="margin-top:24px"><img data-fig="fig_doe" alt="Non-uniformity sigma against inlet velocity on a log axis for wafer temperatures of 900, 1000 and 1100 K. All three curves fall from about 15 percent at 0.20 m/s to a minimum near 0.07 m/s and rise below 0.035 m/s; the temperature curves lie on top of each other." src="assets/fig_doe_dark.svg"></div>
 </div></section>
@@ -122,7 +98,7 @@ footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid va
 <p class="lead reveal">A real reactor is built with discrete exhaust ports. A 3D model with three of them reproduces the radial trend and adds an azimuthal ripple tied to the port positions. The surface below is the actual COMSOL export: 6,012 wafer-face nodes, height and colour both equal to concentration over its mean.</p>
 <div class="two">
 <div class="w3d reveal"><canvas id="waferCanvas" role="img" aria-label="Rotating 3D height map of the precursor concentration over the wafer face from the three-port 3D model, showing a three-fold azimuthal ripple"></canvas><div class="tag"><b>3D wafer face, 6,012 nodes</b>CV 7.9 % full face · 5.9 % excluding a 5 mm rim · drag to rotate</div></div>
-<div class="reveal d1"><div class="card"><img data-fig="fig_wafer3d" data-ext="png" alt="Top-down map of concentration over mean across the wafer face from the 3D model; three lobes of higher concentration align with the exhaust ports." src="assets/fig_wafer3d_dark.png"></div>
+<div class="reveal"><div class="card"><img data-fig="fig_wafer3d" data-ext="png" alt="Top-down map of concentration over mean across the wafer face from the 3D model; three lobes of higher concentration align with the exhaust ports." src="assets/fig_wafer3d_dark.png"></div>
 <p class="note" style="margin-top:12px">This is a surface, over-area coefficient of variation and is not the same statistic as the 1D radial σ of the 2D runs; the two are reported side by side, not compared as equals. The 3D result is one configuration and has not been mesh-independence-tested across the 2D sweep.</p></div>
 </div></div></section>
 
@@ -135,7 +111,7 @@ footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid va
 <tr><td>Undoped poly-Si, University of Waterloo QNC LPCVD facility</td><td class="num">3.0 %</td><td style="color:var(--bad)">just above: 3.34 % expected</td></tr>
 <tr><td>Doped poly-Si, same facility</td><td class="num">10.0 %</td><td style="color:var(--good)">far inside</td></tr>
 </tbody></table></div>
-<div class="card reveal d1"><b>Two caveats that belong next to the result</b><p class="note">COMSOL is deterministic, so the Monte Carlo spread is propagated input uncertainty, not measured run-to-run repeatability; a Cpk computed from it is a model-based sensitivity estimate, not demonstrated capability. And the spec source is an LPCVD tool for 100 mm wafers: the same chemistry family, a different pressure regime and wafer size.</p><p class="note">Thirteen modelling questions were tracked to closure before the redesign was trusted; ten were resolved with citations, two are proprietary and handled as declared simplifications, one (wafer rotation) was kept out because the only available numbers belong to a different reactor class. The table is in the repository under <code>docs/Open_Questions_Resolved.md</code>.</p></div>
+<div class="card reveal"><b>Two caveats that belong next to the result</b><p class="note">COMSOL is deterministic, so the Monte Carlo spread is propagated input uncertainty, not measured run-to-run repeatability; a Cpk computed from it is a model-based sensitivity estimate, not demonstrated capability. And the spec source is an LPCVD tool for 100 mm wafers: the same chemistry family, a different pressure regime and wafer size.</p><p class="note">Thirteen modelling questions were tracked to closure before the redesign was trusted; ten were resolved with citations, two are proprietary and handled as declared simplifications, one (wafer rotation) was kept out because the only available numbers belong to a different reactor class. The table is in the repository under <code>docs/Open_Questions_Resolved.md</code>.</p></div>
 </div></div></section>
 
 <section class="story" id="run"><div class="wrap">
@@ -148,23 +124,11 @@ pip install -r requirements.txt
 <p class="note reveal">The three <code>.mph</code> model files open in COMSOL Multiphysics 6.4 or later; the exports in <code>data/</code> are what every script reads, so the analysis runs without a COMSOL licence.</p>
 </div></section>
 
-<footer><div class="wrap"><div><b style="color:var(--ink)">Soham Kavathekar</b> · MS Chemical &amp; Biomolecular Engineering, University of Pennsylvania<br><a href="mailto:stg3719@seas.upenn.edu">stg3719@seas.upenn.edu</a> · <a href="https://www.linkedin.com/in/soham-kavathekar-cheme">linkedin.com/in/soham-kavathekar-cheme</a> · <a href="https://github.com/Soham-ChemE">github.com/Soham-ChemE</a></div><div>COMSOL Multiphysics 6.4 · Three.js r160</div></div></footer>
+<footer><div class="wrap"><div><b style="color:var(--ink)">Soham Kavathekar</b> · MS Chemical &amp; Biomolecular Engineering, University of Pennsylvania<br><a href="mailto:stg3719@seas.upenn.edu">stg3719@seas.upenn.edu</a> · <a href="https://www.linkedin.com/in/soham-kavathekar-cheme">linkedin.com/in/soham-kavathekar-cheme</a> · <a href="https://github.com/Soham-ChemE">github.com/Soham-ChemE</a></div><div>COMSOL Multiphysics 6.4 · three.js 0.186 · GSAP 3.15 · Lenis 1.3 · <a href="DESIGN.md">design notes</a></div></div></footer>
 
-<script src="assets/data.js"></script>
 <script>
-(function(){
-  const D=window.CVD, root=document.documentElement, btn=document.getElementById('themeBtn');
-  const saved=(()=>{try{return localStorage.getItem('theme')}catch(e){return null}})(); if(saved) root.setAttribute('data-theme',saved);
-  const isDark=()=>root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
-  function applyFigs(){const t=isDark()?'dark':'light';document.querySelectorAll('img[data-fig]').forEach(i=>{i.src='assets/'+i.dataset.fig+'_'+t+'.'+(i.dataset.ext||'svg')});document.dispatchEvent(new CustomEvent('themechange',{detail:{dark:isDark()}}))}
-  btn.addEventListener('click',()=>{const n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}applyFigs()});
-  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyFigs); applyFigs(); window.__isDark=isDark;
-  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches; window.__reduced=reduced;
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15}); document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-  const fmt=(v,f)=>f==='int'?Math.round(v).toLocaleString('en-US'):v.toFixed(+f);
-  const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);const el=e.target,target=+el.dataset.count,f=el.dataset.format;const set=v=>{el.firstChild.textContent=fmt(v,f)};
-    if(reduced){set(target);return}const t0=performance.now(),d=1400;(function tick(t){const p=Math.min(1,(t-t0)/d),k=1-Math.pow(1-p,3);set(target*k);if(p<1)requestAnimationFrame(tick)})(t0)}),{threshold:.6});
-  document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+document.addEventListener('siteready',()=>{
+  const D=window.CVD, root=document.documentElement;
   // sticky DOE profile plot (2D canvas)
   const pc=document.getElementById('profCanvas'); const ctx=pc.getContext('2d'); let cur=null, shown=null;
   function findRun(u,T){return D.doe.find(d=>Math.abs(d.u-u)<1e-6&&d.T===T)}
@@ -177,77 +141,9 @@ pip install -r requirements.txt
     const plot=(run,col,lw)=>{ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.beginPath();run.rc.forEach((p,i)=>{const x=X(p[0]),y=Y(Math.min(1.5,Math.max(0.6,p[1])));i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()};
     if(shown&&shown!==cur){ctx.globalAlpha=.3;plot(shown,muted,1.5);ctx.globalAlpha=1} if(cur)plot(cur,acc,2.5)}
   function setRun(u,T){const r=findRun(u,T);if(!r)return;shown=cur;cur=r;document.getElementById('sfSub').textContent=`u_in = ${u} m/s, T_wafer = ${T} K · ${r.file}.csv`;document.getElementById('sfSigma').textContent=r.sigma.toFixed(1);draw()}
-  const steps=[...document.querySelectorAll('.step')];
-  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){steps.forEach(s=>s.classList.toggle('active',s===e.target));setRun(+e.target.dataset.u,+e.target.dataset.t)}}),{rootMargin:'-45% 0px -45% 0px'});
-  steps.forEach(s=>so.observe(s)); setRun(0.2,1000); addEventListener('resize',draw); document.addEventListener('themechange',draw);
-})();
-</script>
-<script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-const D=window.CVD, reduced=window.__reduced;
-const viridis=t=>{const s=[[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]];t=Math.max(0,Math.min(1,t))*(s.length-1);const i=Math.floor(t),f=t-i,a=s[i],b=s[Math.min(i+1,s.length-1)];return [(a[0]+(b[0]-a[0])*f)/255,(a[1]+(b[1]-a[1])*f)/255,(a[2]+(b[2]-a[2])*f)/255]};
-const textSprite=(txt,color,w=2.4)=>{const c=document.createElement('canvas');c.width=512;c.height=96;const g=c.getContext('2d');g.font='600 40px -apple-system,Segoe UI,Roboto,Helvetica,Arial';g.fillStyle=color;g.textAlign='center';g.fillText(txt,256,62);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));s.scale.set(w,w*96/512,1);return s};
-const mkRenderer=c=>{const r=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));return r};
-const fitTo=(r,cam,el)=>{const w=el.clientWidth,h=el.clientHeight;if(r.domElement.width!==w*r.getPixelRatio()||r.domElement.height!==h*r.getPixelRatio()){r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}return w>820};
-const interp=(rc,r)=>{let i=1;while(i<rc.length-1&&rc[i][0]<r)i++;const a=rc[i-1],b=rc[i];const t=(r-a[0])/((b[0]-a[0])||1);return a[1]+(b[1]-a[1])*Math.max(0,Math.min(1,t))};
-
-// ---------- hero: reactor with the wafer-plane concentration as a height map ----------
-(function(){
-  const canvas=document.getElementById('heroCanvas'), heroEl=canvas.parentElement; const renderer=mkRenderer(canvas), scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(38,2,.1,100); cam.position.set(7.5,2.4,7.5);
-  const ctr=new OrbitControls(cam,canvas); ctr.enableDamping=true; ctr.enableZoom=false; ctr.enablePan=false; ctr.autoRotate=!reduced; ctr.autoRotateSpeed=.5; ctr.minPolarAngle=.9; ctr.maxPolarAngle=1.42;
-  scene.add(new THREE.HemisphereLight(0xffffff,0x223355,1.1)); const dl=new THREE.DirectionalLight(0xffffff,1.3); dl.position.set(4,8,5); scene.add(dl);
-  const g=new THREE.Group(); scene.add(g); const S=20; // 1 scene unit = 1/20 m -> 300 mm wafer = 6 units across... use radius 0.15 m * S = 3
-  const WR=0.15*S, GAP=0.02*S*2.5; // gap exaggerated x2.5 for legibility
-  // chamber
-  const chamber=new THREE.Mesh(new THREE.CylinderGeometry(0.2*S,0.2*S,GAP+1.6,64,1,true),new THREE.MeshStandardMaterial({color:0x8b98a9,transparent:true,opacity:.05,side:THREE.DoubleSide,depthWrite:false})); chamber.position.y=(GAP+1.6)/2-.3; g.add(chamber);
-  const wafer=new THREE.Mesh(new THREE.CylinderGeometry(WR,WR,.06,96),new THREE.MeshStandardMaterial({color:0x5b6676,metalness:.6,roughness:.35})); wafer.position.y=-.03; g.add(wafer);
-  const susceptor=new THREE.Mesh(new THREE.CylinderGeometry(WR+.3,WR+.3,.25,96),new THREE.MeshStandardMaterial({color:0x2b3444,roughness:.8})); susceptor.position.y=-.19; g.add(susceptor);
-  const inlet=new THREE.Mesh(new THREE.CylinderGeometry(1,1,.18,96),new THREE.MeshStandardMaterial({color:0xf59e0b,emissive:0xf59e0b,emissiveIntensity:.35,roughness:.4})); inlet.position.y=GAP+.09; g.add(inlet);
-  const head=new THREE.Mesh(new THREE.CylinderGeometry(0.2*S,0.2*S,.12,64),new THREE.MeshStandardMaterial({color:0x3a4557,roughness:.7,transparent:true,opacity:.22,depthWrite:false})); head.position.y=GAP+.24; g.add(head); const headRing=new THREE.Mesh(new THREE.TorusGeometry(0.2*S,.03,8,96),new THREE.MeshStandardMaterial({color:0x8b98a9})); headRing.rotation.x=Math.PI/2; headRing.position.y=GAP+.24; g.add(headRing);
-  // exhaust slit ring
-  const slit=new THREE.Mesh(new THREE.TorusGeometry(0.2*S,.05,8,96),new THREE.MeshStandardMaterial({color:0x22d3ee,emissive:0x22d3ee,emissiveIntensity:.3})); slit.rotation.x=Math.PI/2; slit.position.y=.35; g.add(slit);
-  const labs=[]; const lab=(t,x,y,z,w)=>{const s=textSprite(t,'#8b98a9',w||1.8);s.position.set(x,y,z);g.add(s);labs.push([s,t,w||1.8]);return s};
-  const inletLab=lab('inlet 10 mm',0,GAP+.95,0,2.0); lab('300 mm wafer, 1000 K',0,-.6,WR+.6,2.6); lab('exhaust slit',-(0.2*S)-.9,.35,0,1.6);
-  // height map: polar grid, height = c/mean
-  const NR=48,NT=96; const geo=new THREE.BufferGeometry(); const pos=new Float32Array((NR+1)*(NT+1)*3), col=new Float32Array((NR+1)*(NT+1)*3), idx=[];
-  for(let i=0;i<=NR;i++)for(let j=0;j<=NT;j++){const k=i*(NT+1)+j;const r=i/NR*138,th=j/NT*Math.PI*2;pos[3*k]=Math.cos(th)*r/1000*S;pos[3*k+2]=Math.sin(th)*r/1000*S;pos[3*k+1]=0;if(i<NR&&j<NT){const a=k,b=k+1,c=k+NT+1,d=k+NT+2;idx.push(a,c,b,b,c,d)}}
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3)); geo.setIndex(idx);
-  const surf=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,side:THREE.DoubleSide,roughness:.5,metalness:.05,transparent:true,opacity:.95})); g.add(surf);
-  const A=D.profiles.before.rc, B=D.profiles.after.rc; const hA=[],hB=[]; for(let i=0;i<=NR;i++){const r=i/NR*138;hA.push(interp(A,r));hB.push(interp(B,r))}
-  const HS=0.85; // height scale: saturating map so the 10x centre spike of the original inlet stays below the showerhead
-  const hmap=v=>HS*(1-Math.exp(-v/1.2));
-  function setMorph(p){for(let i=0;i<=NR;i++){const v=hA[i]+(hB[i]-hA[i])*p;const y=hmap(v);const c=viridis(Math.min(1,v/1.6));for(let j=0;j<=NT;j++){const k=i*(NT+1)+j;pos[3*k+1]=y;col[3*k]=c[0];col[3*k+1]=c[1];col[3*k+2]=c[2]}}
-    geo.attributes.position.needsUpdate=true;geo.attributes.color.needsUpdate=true;geo.computeVertexNormals();
-    const w=10+140*p; inlet.scale.set(w/1000*S/2,1,w/1000*S/2); const sig=D.stats.sigma_before+(D.stats.sigma_after-D.stats.sigma_before)*p, cov=D.stats.cov_before+(D.stats.cov_after-D.stats.cov_before)*p;
-    document.getElementById('roSigma').textContent=sig.toFixed(1)+' %';document.getElementById('roInlet').textContent=Math.round(w)+' mm';document.getElementById('roCov').textContent=Math.round(cov)+' %';document.getElementById('roBar').style.width=(100*p)+'%';
-    document.getElementById('roHint').textContent=p<.02?'scroll to widen the inlet':p>.98?'full-span inlet: 0.07 m/s brings σ to 3.3 %':'widening the inlet…';
-    const ni=p<.5?'inlet 10 mm (original)':'inlet 150 mm (full span)'; if(inletLab.userData.t!==ni){inletLab.userData.t=ni;const s=textSprite(ni,'#f59e0b',2.0);inletLab.material.map.dispose();inletLab.material.map=s.material.map;inletLab.material.needsUpdate=true}}
-  // gas streamlines: particles from inlet down to wafer, then outward to the slit
-  const NPART=160, pg=new THREE.SphereGeometry(.028,6,5), pmat=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.55}); const parts=new THREE.InstancedMesh(pg,pmat,NPART); g.add(parts);
-  const rnd=(()=>{let s=3;return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}})(); const P=[]; for(let i=0;i<NPART;i++)P.push({t:rnd(),th:rnd()*Math.PI*2,f:rnd()}); const m4=new THREE.Matrix4(); let morph=0;
-  function stepParts(dt){const w=(10+140*morph)/1000*S/2;for(const p of P){p.t+=dt*.35;if(p.t>1){p.t=0;p.th=rnd()*Math.PI*2;p.f=rnd()}const r0=p.f*w;let x,y,z;if(p.t<.4){const u=p.t/.4;y=GAP-(GAP-.12)*u;const r=r0;x=Math.cos(p.th)*r;z=Math.sin(p.th)*r}else{const u=(p.t-.4)/.6;const r=r0+(0.2*S-r0)*u;y=.12+.25*u;x=Math.cos(p.th)*r;z=Math.sin(p.th)*r}m4.makeTranslation(x,y,z);parts.setMatrixAt(P.indexOf(p),m4)}parts.instanceMatrix.needsUpdate=true}
-  setMorph(0); const track=document.getElementById('top');
-  function onScroll(){const p=Math.max(0,Math.min(1,scrollY/(track.offsetHeight-innerHeight)));morph=Math.max(0,Math.min(1,(p-.08)/.6));setMorph(reduced?(p>.3?1:0):morph);canvas.style.opacity=1-.6*Math.max(0,(p-.75)/.25)}
-  addEventListener('scroll',onScroll,{passive:true}); onScroll();
-  document.addEventListener('themechange',e=>{const c=e.detail.dark?'#8b98a9':'#5b6676';labs.forEach(([s,t,w])=>{if(s===inletLab)return;const n=textSprite(t,c,w);s.material.map.dispose();s.material.map=n.material.map;s.material.needsUpdate=true})});
-  let last=performance.now(); function tick(t){const dt=Math.min(.05,(t-last)/1000);last=t;const wide=fitTo(renderer,cam,heroEl);g.position.set(wide?2.2:0,wide?-.6:.9,0);g.scale.setScalar(wide?1:.72);ctr.target.set(wide?2.2:0,wide?.3:1.2,0);ctr.update();if(!reduced)stepParts(dt);renderer.render(scene,cam);requestAnimationFrame(tick)} requestAnimationFrame(tick);
-})();
-
-// ---------- 3D wafer face from the three-port model ----------
-(function(){
-  const canvas=document.getElementById('waferCanvas'), holder=canvas.parentElement; const renderer=mkRenderer(canvas), scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(36,1,.1,100); cam.position.set(0,4.2,6.2);
-  const ctr=new OrbitControls(cam,canvas); ctr.enableDamping=true; ctr.enableZoom=false; ctr.enablePan=false; ctr.autoRotate=!reduced; ctr.autoRotateSpeed=.8; ctr.maxPolarAngle=1.4;
-  scene.add(new THREE.HemisphereLight(0xffffff,0x223355,1.2)); const dl=new THREE.DirectionalLight(0xffffff,1.2); dl.position.set(3,6,4); scene.add(dl);
-  const W=D.wafer3d, n=W.n, S=20, HS=2.2; const pos=new Float32Array(n*3), col=new Float32Array(n*3); const cm=W.c_mean;
-  let lo=1e9,hi=-1e9; for(let i=0;i<n;i++){const v=W.c[i]/cm;lo=Math.min(lo,v);hi=Math.max(hi,v)}
-  for(let i=0;i<n;i++){const v=W.c[i]/cm;pos[3*i]=W.x[i]/1000*S;pos[3*i+2]=-W.y[i]/1000*S;pos[3*i+1]=(v-lo)/(hi-lo)*HS;const c=viridis((v-lo)/(hi-lo));col[3*i]=c[0];col[3*i+1]=c[1];col[3*i+2]=c[2]}
-  const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3)); geo.setIndex(W.tri); geo.computeVertexNormals();
-  const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,side:THREE.DoubleSide,roughness:.55})); scene.add(mesh);
-  const base=new THREE.Mesh(new THREE.CylinderGeometry(3,3,.08,96),new THREE.MeshStandardMaterial({color:0x5b6676,metalness:.5,roughness:.4})); base.position.y=-.06; scene.add(base);
-  const lo_s=textSprite(`c/mean ${lo.toFixed(2)} → ${hi.toFixed(2)}, height and colour`, '#8b98a9', 3.6); lo_s.position.set(0,-.5,3.4); scene.add(lo_s);
-  function tick(){fitTo(renderer,cam,holder);ctr.update();renderer.render(scene,cam);requestAnimationFrame(tick)} tick();
-})();
+  
+  window.SITE.steps('.step',k=>{const [u,T]=k.split('|');setRun(+u,+T)}); addEventListener('resize',draw); document.addEventListener('themechange',draw);
+});
 </script>
 </body>
 </html>

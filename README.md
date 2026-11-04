@@ -1,8 +1,9 @@
-<p align="center"><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/"><img src="docs/assets/hero.png" alt="Live page: 3D view of the axisymmetric CVD reactor with the wafer-plane precursor concentration drawn as a height map; scrolling widens the inlet from 10 to 150 mm" width="100%"></a></p>
+<p align="center"><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/"><img src="docs/assets/hero.svg" alt="CVD reactor uniformity: the wafer-plane precursor profile cycling through the 10 mm inlet, the full-span inlet at 0.10 m/s and the full-span inlet at 0.07 m/s, with the non-uniformity readout, next to the headline numbers" width="100%"></a></p>
+
+<p align="center"><b><a href="https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/">Open the live page</a></b> · scroll-driven 3D: the reactor with the wafer-plane concentration as a height map morphing from 179.6 % to 6.1 % to 3.3 % as the inlet widens and slows</p>
 
 <div align="center">
 
-### [▶ View the live page](https://soham-cheme.github.io/CVD-Reactor-Uniformity-COMSOL/) · scroll to widen the inlet, step through the 14-run DOE, rotate the 3D wafer map
 
 </div>
 
