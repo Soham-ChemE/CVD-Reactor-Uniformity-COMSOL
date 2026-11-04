@@ -61,7 +61,7 @@ for (const pageName of PAGES) {
     fs.writeFileSync(HERO_JSON, JSON.stringify(data)); console.log('hero json', HERO_JSON, data.map(d => d.points.length)); await ctx.close();
   }
   if (LH) {
-    const out = path.join(DOCS, 'qa', stem === 'index' ? 'lighthouse.report' : `lighthouse.${stem}.report`);
+    const out = path.join(DOCS, 'qa', stem === 'index' ? 'lighthouse' : `lighthouse.${stem}`);   // Lighthouse appends .report.html / .report.json
     const cmd = `lighthouse ${base}${pageName} --preset=desktop --quiet --chrome-flags="--headless=new --no-sandbox --use-gl=angle --use-angle=swiftshader" --output=html --output=json --output-path=${out} --only-categories=performance,accessibility,best-practices,seo --max-wait-for-load=30000`;
     // spawned asynchronously so this process keeps serving the page to Lighthouse's Chrome (a blocking exec would starve the in-process server)
     await new Promise((res, rej) => { const c = spawn(cmd, { shell: true, stdio: 'inherit', env: { ...process.env, CHROME_PATH: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1243/chrome-linux64/chrome' } }); const t = setTimeout(() => { c.kill(); rej(new Error('lighthouse timed out')); }, 420000); c.on('exit', code => { clearTimeout(t); code ? rej(new Error('lighthouse exit ' + code)) : res(); }); });
